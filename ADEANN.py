@@ -60,7 +60,6 @@ tab_converte = ['f', 'F', 'n', '.', 'n', '.', 'f', 'F', 'F', 'f', 'B', 'f', '[',
 
 
 def zerar_fitness(fit):
-    i, j = 0, 0
     fit = np.zeros(INDIVIDUOS * GENE)
     fit.shape = (INDIVIDUOS, GENE)
     return fit
@@ -74,7 +73,6 @@ def imprime_hist_fitness(hist_fit, file, contador):
 
 
 def genotipo_estatico(individuos, gene):
-    i, j = 0, 0
     gen = np.zeros(individuos * gene)
     gen.shape = (individuos, gene)
     for i in range(0, gene):
@@ -103,3 +101,16 @@ def imprime_genbin(gen, individuos, gene, file):
             print(gen[i][j])
     return gen
 
+
+def imprime_genbindec(gen_bin_dec, individuos, gene_dec):
+    i, j = 0, 0
+    print("\n")
+    for i in range(0, individuos):
+        print("-Individuo["+str(i+1)+"]-\n")
+
+        for j in range(0, gene_dec):
+            print("%d\t", gen_bin_dec[i][j])
+    print("\n\n\n")
+    return gen_bin_dec
+
+    
