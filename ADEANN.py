@@ -114,8 +114,6 @@ def imprime_genbindec(gen_bin_dec, individuos, gene_dec):
     return gen_bin_dec
 
 
-
-
 def imprime_genstring(gen_string, individuos, gene_dec, file):
 
     for i in range(0, individuos):
@@ -124,9 +122,9 @@ def imprime_genstring(gen_string, individuos, gene_dec, file):
         for j in range(0, gene_dec):
             print(gen_string[i][j])
             # fprintf(pFile, "%c", gen_string[i][j])
-        CONTID+=1
+        CONTID += 1
         if gen_string[i][gene_dec + 1] is 'V':
-            
+
             print("\t STRING VALIDA")
             # fprintf(pFile, "\t STRING VALIDA");
             mapeamento_genotipo_fenotipo(NENT, NSAI, aleatorio, TIPO, file)
@@ -143,11 +141,40 @@ def imprime_genstring(gen_string, individuos, gene_dec, file):
             FIT[INDIC][4] = 0.0
             FIT[INDIC][5] = 0.0
             FIT[INDIC][6] = 0.0
-            INDIC+=1
+            INDIC += 1
             printf("\t STRING INVALIDA")
-            #fprintf(pFile, "\t STRING INVALIDA"); }
+            # fprintf(pFile, "\t STRING INVALIDA"); }
     return FIT
 
 
+def legenes_genbin(gen, gen_bin_dec, individuos, gene):
+
+  # gene1, gene2, gene3, gene4, gene5, gene6, i;
+    start = 0
+    j = 0
+    compactador = 0
+    stop = (gene / 6)
+
+    while (j < individuos):
+        for i in range(0, stop):
+            gene1 = gen[j][start]
+            gene2 = gen[j][start + 1]
+            gene3 = gen[j][start + 2]
+            gene4 = gen[j][start + 3]
+            gene5 = gen[j][start + 4]
+            gene6 = gen[j][start + 5]
+            decimal = converte_genbindec(gene1, gene2, gene3, gene4, gene5, gene6, j, compactador)
+            gen_bin_dec[j][compactador] = decimal
+            compactador+=1
+            start = start + 6
+        j+=1
+        start = 0
+        compactador = 0
+  
+
+
 def mapeamento_genotipo_fenotipo(NENT, NSAI, aleatorio,  tipo, ile):
+    pass
+
+def converte_genbindec(gene1, gene2, gene3, gene4, gene5, gene6, j, compactador):
     pass
