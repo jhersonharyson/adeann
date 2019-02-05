@@ -1,0 +1,4 @@
+python 3.6.8
+pip install keras
+pip install tensorflow
+pip install numpy
