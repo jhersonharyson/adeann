@@ -113,4 +113,41 @@ def imprime_genbindec(gen_bin_dec, individuos, gene_dec):
     print("\n\n\n")
     return gen_bin_dec
 
-    
+
+
+
+def imprime_genstring(gen_string, individuos, gene_dec, file):
+
+    for i in range(0, individuos):
+        print("\n-Individuo["+str(i+1)+"]-\n")
+        # fprintf(pFile, "\n-Individuo[%d]-\n", i + 1);
+        for j in range(0, gene_dec):
+            print(gen_string[i][j])
+            # fprintf(pFile, "%c", gen_string[i][j])
+        CONTID+=1
+        if gen_string[i][gene_dec + 1] is 'V':
+            
+            print("\t STRING VALIDA")
+            # fprintf(pFile, "\t STRING VALIDA");
+            mapeamento_genotipo_fenotipo(NENT, NSAI, aleatorio, TIPO, file)
+        else:
+            FIT[INDIC][0] = (INDIC + 1)
+            FIT[INDIC][1] = 0.0
+            FIT[INDIC][2] = FIT[INDIC][0]
+            aux = indic + 1
+            FIT[INDIC][3] = (INDIC + 1)
+            if INDIC >= 1:
+                FIT[INDIC][3] = INDIC + 1 + FIT[INDIC - 1][3]
+            else:
+                FIT[INDIC][3] = INDIC + 1
+            FIT[INDIC][4] = 0.0
+            FIT[INDIC][5] = 0.0
+            FIT[INDIC][6] = 0.0
+            INDIC+=1
+            printf("\t STRING INVALIDA")
+            #fprintf(pFile, "\t STRING INVALIDA"); }
+    return FIT
+
+
+def mapeamento_genotipo_fenotipo(NENT, NSAI, aleatorio,  tipo, ile):
+    pass
