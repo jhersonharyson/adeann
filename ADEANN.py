@@ -173,8 +173,6 @@ def legenes_genbin(gen, gen_bin_dec, individuos, gene):
   
 
 
-def mapeamento_genotipo_fenotipo(NENT, NSAI, aleatorio,  tipo, ile):
-    pass
 
 def converte_genbindec(gene1, gene2, gene3, gene4, gene5, gene6, j, compactador):
     decimal = gene6 * 32 + gene5 * 16 + gene4 * 8 + gene3 * 4 + gene2 * 2 + gene1
@@ -223,5 +221,39 @@ def avalia_regras_gen_string(gen_string, individuos, gene_dec):
                 #//getch();
 
 
+def mapeamento_genotipo_fenotipo(NENT, NSAI, aleatorio, TIPO, file):
+    global NINT, NINT1, NINT2
+    # if NR is NR1:
+    #     NR1 = np.random.random_integers(2, 20)
+    N_TIPO = np.random.random_integers(2, 20)
+
+    NINT = N_TIPO
+    NINT1 = N_TIPO
+    NINT2 = np.random.random_integers(2, 20)
+
+    NINT_N3 = np.zeros(1)
+    NINT_N3[0] = NINT1
+    SIZE_N3 = len(NINT_N3)
+
+    NINT_N4 = np.zeros(2)
+    NINT_N4[0] = NINT1
+    NINT_N4[1] = NINT2
+    SIZE_N4 = len(NINT_N4)
+    ############################################################################################
+    #n == 3 ? Mapeamento(NENT, NSAI, NINT_N3, SIZE_N3, "1.4", pFile) : Mapeamento(NENT, NSAI, NINT_N4, SIZE_N4, "1.4", pFile); // (ENTRADA, SAIDA, NR, TIPO)
 
 
+    if (N is 3):
+        treina_rede(CONTID, file, NINT)
+    if (N is 4):
+        treina_rede_(CONTID, file, NINT1, NINT2)
+
+
+def NR_RAND(int):
+    pass
+
+def treina_rede(individuos, file, NINT):
+    print("Treina rede");
+
+def treina_rede_(contind, pFile, NINT1, NINT2):
+    print("Treina rede 4")
