@@ -177,4 +177,5 @@ def mapeamento_genotipo_fenotipo(NENT, NSAI, aleatorio,  tipo, ile):
     pass
 
 def converte_genbindec(gene1, gene2, gene3, gene4, gene5, gene6, j, compactador):
-    pass
+    decimal = gene6 * 32 + gene5 * 16 + gene4 * 8 + gene3 * 4 + gene2 * 2 + gene1
+    return decimal
