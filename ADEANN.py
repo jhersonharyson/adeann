@@ -115,7 +115,7 @@ def imprime_genbindec(gen_bin_dec, individuos, gene_dec):
 
 
 def imprime_genstring(gen_string, individuos, gene_dec, file):
-
+    global CONTID, INDIC
     for i in range(0, individuos):
         print("\n-Individuo["+str(i+1)+"]-\n")
         # fprintf(pFile, "\n-Individuo[%d]-\n", i + 1);
@@ -127,12 +127,12 @@ def imprime_genstring(gen_string, individuos, gene_dec, file):
 
             print("\t STRING VALIDA")
             # fprintf(pFile, "\t STRING VALIDA");
-            mapeamento_genotipo_fenotipo(NENT, NSAI, aleatorio, TIPO, file)
+            mapeamento_genotipo_fenotipo(NENT, NSAI, 0, TIPO, file) # 0 -> aleatorio
         else:
             FIT[INDIC][0] = (INDIC + 1)
             FIT[INDIC][1] = 0.0
             FIT[INDIC][2] = FIT[INDIC][0]
-            aux = indic + 1
+            aux = INDIC + 1
             FIT[INDIC][3] = (INDIC + 1)
             if INDIC >= 1:
                 FIT[INDIC][3] = INDIC + 1 + FIT[INDIC - 1][3]
@@ -142,7 +142,7 @@ def imprime_genstring(gen_string, individuos, gene_dec, file):
             FIT[INDIC][5] = 0.0
             FIT[INDIC][6] = 0.0
             INDIC += 1
-            printf("\t STRING INVALIDA")
+            print("\t STRING INVALIDA")
             # fprintf(pFile, "\t STRING INVALIDA"); }
     return FIT
 
@@ -186,4 +186,42 @@ def legenes_genbindec_string(gen_bin_dec, gen_string, individuos, gene_dec):
             gen_string[j][i] = tab_converte[gen_bin_dec[j][i]]
 
     return gen_string
+
+def avalia_regras_gen_string(gen_string, individuos, gene_dec):
+    i, j = 0, 0;
+    string_val = ['.', 'f', '[', 'F', 'f', 'n', 'B', ']']
+    for j in range(0, individuos):
+        for i in range(0, gene_dec - 6):
+            #Le do inicio para o final com um passo de um bit.
+            if ((gen_string[j][i] is '.') and (gen_string[j][i + 1] is 'f') and (gen_string[j][i + 2] is '[') and (gen_string[j][i + 3] is 'F') and (gen_string[j][i + 4] is 'f') and (gen_string[j][i + 5] == 'n') and (gen_string[j][i + 6] is 'B') and (gen_string[j][i + 7] is ']')):
+                gen_string[j][gene_dec + 1] = 'V'
+
+    for j in range(0, individuos):
+        #Le do final para o inicio com um passo de um bit.
+        for i in range(gene_dec, 4, -1):
+            if ((gen_string[j][i] is '.') and (gen_string[j][i + 1] is 'f') and (gen_string[j][i + 2] is '[') and (gen_string[j][i + 3] is 'F') and (gen_string[j][i + 4] is 'f') and (gen_string[j][i + 5] is 'n') and (gen_string[j][i + 6] is 'B') and (gen_string[j][i + 7] is ']')):
+                gen_string[j][gene_dec + 1] = 'V'
+
+    #mudei aqui baixo todo la?o for
+
+    for j in range(0, individuos):
+        #Le de forma sequencial bit a bit do inicio para o fim.
+        cont_elem = 0
+        pos_string = 0
+
+        for i in range(0,gene_dec):
+          carac = gen_string[j][i]
+
+          if string_val[pos_string] is carac:
+                cont_elem += 1
+                pos_string += 1
+
+          if (cont_elem is 8):
+                gen_string[j][gene_dec + 1] = 'V'
+                #//printf("j=%d",j);
+                #//printf("cont_elem=%d",cont_elem);
+                #//getch();
+
+
+
 
