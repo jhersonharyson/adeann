@@ -179,3 +179,11 @@ def mapeamento_genotipo_fenotipo(NENT, NSAI, aleatorio,  tipo, ile):
 def converte_genbindec(gene1, gene2, gene3, gene4, gene5, gene6, j, compactador):
     decimal = gene6 * 32 + gene5 * 16 + gene4 * 8 + gene3 * 4 + gene2 * 2 + gene1
     return decimal
+
+def legenes_genbindec_string(gen_bin_dec, gen_string, individuos, gene_dec):
+    for j in range(0, individuos):
+        for i in range(0, gene_dec):
+            gen_string[j][i] = tab_converte[gen_bin_dec[j][i]]
+
+    return gen_string
+
