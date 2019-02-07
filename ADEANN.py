@@ -77,7 +77,7 @@ def genotipo_estatico(individuos, gene):
     gen.shape = (individuos, gene)
     for i in range(0, gene):
         for j in range(0, individuos):
-            gen[i][j] = np.random.random_integers(0, 1)
+            gen[i][j] = np.random.random_integers(0, 1, 1)[0]
     return gen
 
 def genotipo_dinamico( individuos, gene):
@@ -88,7 +88,7 @@ def genotipo_dinamico( individuos, gene):
 
     for i in range(0, individuos):
         for j in range(0, gene):
-            gen[i][j] = np.random.random_integers(0,1,1);
+            gen[i][j] = np.random.random_integers(0, 1, 1)[0]
 
     return gen
 
@@ -147,7 +147,6 @@ def imprime_genstring(gen_string, individuos, gene_dec, file):
             FIT[INDIC][0] = INDIC + 1
             FIT[INDIC][1] = 0.0
             FIT[INDIC][2] = FIT[INDIC][0]
-            aux = INDIC + 1
             FIT[INDIC][3] = INDIC + 1
             if INDIC >= 1:
                 FIT[INDIC][3] = INDIC + 1 + FIT[INDIC - 1][3]
@@ -241,11 +240,11 @@ def mapeamento_genotipo_fenotipo(NENT, NSAI, aleatorio, TIPO, file):
     global NINT, NINT1, NINT2
     # if NR is NR1:
     #     NR1 = np.random.random_integers(2, 20)
-    N_TIPO = np.random.random_integers(2, 20)
+    N_TIPO = np.random.random_integers(2, 20, 1)[0]
 
     NINT = N_TIPO
     NINT1 = N_TIPO
-    NINT2 = np.random.random_integers(2, 20)
+    NINT2 = np.random.random_integers(2, 20, 1)[0]
 
     NINT_N3 = np.zeros(1)
     NINT_N3[0] = NINT1
@@ -293,7 +292,7 @@ def ordena(fit, file):
             min = j
 
 
-    ch = fit[i][0]
+    ch  = fit[i][0]
     ch1 = fit[i][1]
     ch2 = fit[i][4]
     ch3 = fit[i][5]
@@ -338,30 +337,29 @@ def main():
     #//int pontos_corte=(gene_dec*0.9);
 
     while (contador <= GERACAO):
-        imprime_genbin(gen_bin, INDIVIDUOS, GENE, file);
-        legenes_genbin(gen_bin, gen_bin_dec, INDIVIDUOS, GENE);
-        imprime_genbindec(gen_bin_dec, INDIVIDUOS, gene_dec);
-        legenes_genbindec_string(gen_bin_dec, gen_string, INDIVIDUOS, gene_dec);
-        contador1 = 1; #//contador do sumero de cruzamentos por gera??o
-        FIT = zera_fitness(FIT);
-        avalia_regras_gen_string(gen_string, INDIVIDUOS, gene_dec); #//Avalia Regras Validas
-        imprime_genstring(gen_string, INDIVIDUOS, gene_dec, file);  #//Imprime Individuo[i] e DNA
+        imprime_genbin(gen_bin, INDIVIDUOS, GENE, file)
+        legenes_genbin(gen_bin, gen_bin_dec, INDIVIDUOS, GENE)
+        imprime_genbindec(gen_bin_dec, INDIVIDUOS, gene_dec)
+        legenes_genbindec_string(gen_bin_dec, gen_string, INDIVIDUOS, gene_dec)
+        contador1 = 1 #//contador do sumero de cruzamentos por gera??o
+        FIT = zera_fitness(FIT)
+        avalia_regras_gen_string(gen_string, INDIVIDUOS, gene_dec) #//Avalia Regras Validas
+        imprime_genstring(gen_string, INDIVIDUOS, gene_dec, file)  #//Imprime Individuo[i] e DNA
         #//Ordenar Individuos
         ordena(FIT, file)
         #//Imprimir Individuos
 
-        print(HIST_FIT)
-        input()
-        imprime_fitness(FIT, file, contador);
+
+        imprime_fitness(FIT, file, contador)
         contador += 1
         INDIC = 0
-        while (contador1 <= ((gene_dec * 0.8))):
+        while contador1 <= (gene_dec * 0.8):
             # realiza (individuos/2) cruzamentos
-            selecao(gen_bin, gen_string, gene_dec);
-            contador1+=1;
+            selecao(gen_bin, gen_string, gene_dec)
+            contador1 += 1
 
-        contador1 = 1;
-        while (contador1 <= (gene_dec * 0.8)):
+        contador1 = 1
+        while contador1 <= (gene_dec * 0.8):
             #//516-86-14
             mutacao(gen_bin);
             contador1+=1;
@@ -387,52 +385,67 @@ def main():
 
 
 def selecao(gen, gen_string, gene_dec):
-    e1 = 0;
-    e = 0;
-    hab_pc = 0;
-    j = (INDIVIDUOS - 1);
+    e1 = 0
+    e = 0
+    j = INDIVIDUOS - 1
 
-    while (e == e1):
-        e = np.random.random_integers(0,1,1)
-        e2 = int(FIT[e][0])
-        e2-=1
-        if (e2 >= (INDIVIDUOS / 2)):
-            e2 = 1;
-        e1 = np.random.random_integers(0,1,1)
-        e3 = int(FIT[e1][0])
-        e3-=1
-        if (e3 >= (INDIVIDUOS / 2)):
+    while e == e1:
+        e = np.random.random_integers(0, 1, 1)[0]
+        e2 = int(FIT[e][1])
+
+        e2 -= 1
+        if e2 >= (INDIVIDUOS / 2):
+            e2 = 1
+        e1 = np.random.random_integers(0, 1, 1)[0]
+        e3 = int(FIT[e1][1])
+        e3 -= 1
+        if e3 >= (INDIVIDUOS / 2):
             e3 = 0
 
-    e4 = np.random.random_integers(0,1,1)
-    e5 = int(FIT[e4][0])
-    e5-=1
-    if (e5 <= (INDIVIDUOS / 2) - 1):
+    e4 = np.random.random_integers(0, 1, 1)[0]
+    e5 = int(FIT[e4][1])
+    e5 -= 1
+    if e5 <= (INDIVIDUOS / 2) - 1:
         e5 = j - e5
-    # //printf("\nIndividuo 1 Selecionado para o Cruzamento =");
-    # //printf("%d",e2);
-    # //printf("\nIndividuo 2 Selecionado para o Cruzamento =");
-    # //printf("%d",e3);
-    # //printf("\nIndividuo 3 Selecionado para o Cruzamento =");
-    # //printf("%d",e5);
-    # //cruzamento pai e mae
-    # //printf("\ncruza1");
-    # //  if(e2 < 0) e2 = e2*(-1);
-    # //  if(e3 < 0) e3 = e3*(-1);
-    # //  if(e3 > 4 && n == 4) e5 = 4;
-    #
-    # //printf("\n %d %d %d", e2, e3, e5);
-    # //printf("t - %d",sizeof(gen[0][0]));
-    cruzamento(e2, e3, e3, gen, gen_string, gene_dec);
-    #//printf("\ncruza");
+
+    cruzamento(e2, e3, e3, gen, gen_string, gene_dec)
+
+
+def cruzamento(i, j, pos, gen, gen_string, gene_dec):
+
+    pc = np.random.random_integers(0, INDIVIDUOS, 1)[0]
+    pc = (pc / 100)
+    ale = (GENE - 12)
+    gen_ale = np.random.random_integers(0, ale, 1)[0]
+    gen_ale1 = np.random.random_integers(0, ale, 1)[0]
+    if pc <= 0.6:
+        gen[pos][gen_ale] = gen[i][gen_ale]
+        gen[pos][gen_ale1] = gen[j][gen_ale1]
+        gen[pos][gen_ale + 1] = gen[i][gen_ale + 1]
+        gen[pos][gen_ale1 + 1] = gen[j][gen_ale1 + 1]
+        #//
+        gen[pos][gen_ale + 2] = gen[i][gen_ale + 2]
+        gen[pos][gen_ale1 + 2] = gen[j][gen_ale1 + 2]
+        #//
+        gen[pos][gen_ale + 3] = gen[i][gen_ale + 3]
+        gen[pos][gen_ale1 + 3] = gen[j][gen_ale1 + 3]
+        #//
+        gen[pos][gen_ale + 4] = gen[i][gen_ale + 4]
+        gen[pos][gen_ale1 + 4] = gen[j][gen_ale1 + 4]
+        #//
+        gen[pos][gen_ale + 5] = gen[i][gen_ale + 5]
+        gen[pos][gen_ale1 + 5] = gen[j][gen_ale1 + 5]
+
+
+
 
 
 def imprime_fitness( fit, file, contador):
     global HIST_FIT
-    soma_fit = 0.0;
-    soma_nint = 0.0;
-    contador_val = 0;
-    var_nint = 0.0;
+    soma_fit = 0.0
+    soma_nint = 0.0
+    contador_val = 0
+    var_nint = 0.0
 
     #fprintf(pFile, "\n\nResumo da Geracao:%d", contador);
     #fprintf(pFile, "\n_______________________________________________________________");
