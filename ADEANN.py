@@ -80,6 +80,15 @@ def genotipo_estatico(individuos, gene):
             gen[i][j] = np.random.random_integers(0, 1)
     return gen
 
+def genotipo_dinamico( individuos, gene):
+    gen = np.zeros(individuos * gene)
+    gen.shape = (individuos , gene)
+
+    for i in range(0, individuos):
+        for j in range(0, gene):
+            gen[i][j] = np.random.random_integers(0,1,1);
+
+    return gen
 
 def gen_bin_dec_genotipo_dinamico(individuos, gene_dec):
     gen_dec = np.zeros(individuos * gene_dec)
@@ -257,3 +266,5 @@ def treina_rede(individuos, file, NINT):
 
 def treina_rede_(contind, pFile, NINT1, NINT2):
     print("Treina rede 4")
+
+
