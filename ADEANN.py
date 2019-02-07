@@ -17,7 +17,7 @@ print(np.random.random_integers(0, 1))
 
 # # model.fit(x_train, y_train, epochs=5, batch_size=32)
 # ALGORITMO GENÉTICO
-GERACAO = 1
+GERACAO = 10
 INDIVIDUOS = 60
 GENE = 516
 NINTER = 10000
@@ -51,7 +51,7 @@ SOMA_NINT_TOTAL = 0
 
 # CONSTANTES
 FIT = 0
-HIST_FIT = 0
+HIST_FIT = [(None, [])]*GERACAO
 
 tab_converte = ['f', 'F', 'n', '.', 'n', '.', 'f', 'F', 'F', 'f', 'B', 'f', '[', 'n', '[', '.',
                 'f', ']', 'n', '*', '.', 'F', 'f', 'F', ']', '.', '[', 'f', 'f', '*', 'B', ']',
@@ -349,6 +349,9 @@ def main():
         #//Ordenar Individuos
         ordena(FIT, file)
         #//Imprimir Individuos
+
+        print(HIST_FIT)
+        input()
         imprime_fitness(FIT, file, contador);
         contador += 1
         INDIC = 0
@@ -383,6 +386,45 @@ def main():
         #fprintf(pFile, "\nsimulacao concluida");
 
 
+def selecao(gen, gen_string, gene_dec):
+    e1 = 0;
+    e = 0;
+    hab_pc = 0;
+    j = (INDIVIDUOS - 1);
+
+    while (e == e1):
+        e = np.random.random_integers(0,1,1)
+        e2 = int(FIT[e][0])
+        e2-=1
+        if (e2 >= (INDIVIDUOS / 2)):
+            e2 = 1;
+        e1 = np.random.random_integers(0,1,1)
+        e3 = int(FIT[e1][0])
+        e3-=1
+        if (e3 >= (INDIVIDUOS / 2)):
+            e3 = 0
+
+    e4 = np.random.random_integers(0,1,1)
+    e5 = int(FIT[e4][0])
+    e5-=1
+    if (e5 <= (INDIVIDUOS / 2) - 1):
+        e5 = j - e5
+    # //printf("\nIndividuo 1 Selecionado para o Cruzamento =");
+    # //printf("%d",e2);
+    # //printf("\nIndividuo 2 Selecionado para o Cruzamento =");
+    # //printf("%d",e3);
+    # //printf("\nIndividuo 3 Selecionado para o Cruzamento =");
+    # //printf("%d",e5);
+    # //cruzamento pai e mae
+    # //printf("\ncruza1");
+    # //  if(e2 < 0) e2 = e2*(-1);
+    # //  if(e3 < 0) e3 = e3*(-1);
+    # //  if(e3 > 4 && n == 4) e5 = 4;
+    #
+    # //printf("\n %d %d %d", e2, e3, e5);
+    # //printf("t - %d",sizeof(gen[0][0]));
+    cruzamento(e2, e3, e3, gen, gen_string, gene_dec);
+    #//printf("\ncruza");
 
 
 def imprime_fitness( fit, file, contador):
@@ -431,24 +473,30 @@ def imprime_fitness( fit, file, contador):
         print("Media de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", soma_nint / contador_val);
         # fprintf(pFile, "\nMedia do Fitness=%3.4f\n", soma_fit / contador_val);
         # fprintf(pFile, "Media de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", soma_nint / contador_val);
+    #[(None, []), (None, []), (None, []), (None, []), (None, []), (None, []), (None, []), (None, []), (None, []), (None, [])]
+    HIST_FIT[contador - 1][1].append(fit[0][1])
 
-    HIST_FIT[contador - 1][0] = fit[0][1];
+    #HIST_FIT[contador - 1][0] = fit[0][1];
+
     if (contador_val > 0):
-        HIST_FIT[contador - 1][1] = soma_fit / contador_val;
+        #HIST_FIT[contador - 1][1] = soma_fit / contador_val;
+        HIST_FIT[contador - 1][1].append(soma_fit / contador_val)
     else:
-        HIST_FIT[contador - 1][1] = 0.0;
+        #HIST_FIT[contador - 1][1] = 0.0;
+        HIST_FIT[contador - 1][1].append(0.0)
+
     for i in range(0, INDIVIDUOS):
 
         if (fit[i][5] > 0):
             var_nint = var_nint + pow((fit[i][5] - (soma_nint / contador_val)), 2) / contador_val
 
     print("Variancia de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", var_nint)
-    print("Desvio Padrao de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", (var_nint)^(-1/2))
+    print("Desvio Padrao de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", (var_nint)**(1/2))
     # fprintf(pFile, "Variancia de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", var_nint);
     # fprintf(pFile, "Desvio Padrao de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", sqrt(var_nint));
     if (contador_val > 0):
-        print("Erro Padrao de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", (var_nint)^(-1/2) / (contador_val)^(-1/2));
-        print("Coeficiente de Variacao de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", (var_nint)^(-1/2) / (soma_nint / contador_val));
+        print("Erro Padrao de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", (var_nint)**(-1/2) / (contador_val)**(1/2));
+        print("Coeficiente de Variacao de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", (var_nint)**(1/2) / (soma_nint / contador_val));
 
         # fprintf(pFile, "Erro Padrao de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", sqrt(var_nint) / sqrt(contador_val));
         # fprintf(pFile, "Coeficiente de Variacao de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", sqrt(var_nint) / (soma_nint / contador_val));
