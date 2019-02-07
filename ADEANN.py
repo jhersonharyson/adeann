@@ -1,22 +1,5 @@
 import numpy as np
 
-print(np.random.random_integers(0, 1))
-
-# arr = np.zeros(9)
-# arr.shape = (3,3)
-# print(arr)
-# from keras.models import Sequential
-# from keras.layers import Dense
-
-# model = Sequential()
-# model.add(Dense(units=64,activation='relu', input_dim=2))
-# model.add(Dense(units=10, activation='softmax'))
-
-# model.compile(loss='categorical_crossentropy',
-#               optimizer='sgd',
-#               metrics=['accuracy'])
-
-# # model.fit(x_train, y_train, epochs=5, batch_size=32)
 # ALGORITMO GENÉTICO
 GERACAO = 10
 INDIVIDUOS = 60
@@ -233,7 +216,7 @@ def avalia_regras_gen_string(gen_string, individuos, gene_dec):
                 cont_elem += 1
                 pos_string += 1
 
-            if (cont_elem is 8):
+            if cont_elem is 8:
                 gen_string[j][gene_dec + 1] = 'V'
                 # //printf("j=%d",j);
                 # //printf("cont_elem=%d",cont_elem);
@@ -272,10 +255,42 @@ def NR_RAND(int):
 
 
 def treina_rede(individuos, file, NINT):
+
+    # arr = np.zeros(9)
+    # arr.shape = (3,3)
+    # print(arr)
+    # from keras.models import Sequential
+    # from keras.layers import Dense
+
+    # model = Sequential()
+    # model.add(Dense(units=64,activation='relu', input_dim=2))
+    # model.add(Dense(units=10, activation='softmax'))
+
+    # model.compile(loss='categorical_crossentropy',
+    #               optimizer='sgd',
+    #               metrics=['accuracy'])
+
+    # # model.fit(x_train, y_train, epochs=5, batch_size=32)
     print("Treina rede");
 
 
 def treina_rede_(contind, pFile, NINT1, NINT2):
+
+    # arr = np.zeros(9)
+    # arr.shape = (3,3)
+    # print(arr)
+    # from keras.models import Sequential
+    # from keras.layers import Dense
+
+    # model = Sequential()
+    # model.add(Dense(units=64,activation='relu', input_dim=2))
+    # model.add(Dense(units=10, activation='softmax'))
+
+    # model.compile(loss='categorical_crossentropy',
+    #               optimizer='sgd',
+    #               metrics=['accuracy'])
+
+    # # model.fit(x_train, y_train, epochs=5, batch_size=32)
     print("Treina rede 4")
 
 
@@ -292,7 +307,7 @@ def ordena(fit, file):
         for j in range(i + 1, INDIVIDUOS):
             AUX1 = fit[j][1]
             AUX2 = fit[min][1]
-            if (AUX1 > AUX2):
+            if AUX1 > AUX2:
                 min = j
 
         ch = fit[i][0]
@@ -328,6 +343,7 @@ def main():
 
     # gene : represneta o numero de genes por inidividuo, nesse caso 516;
     gene_dec = int(GENE / 6)  # //43+1=44 ultimo elemento armazena status da string valida % = valida;
+
     # //////    printf("Gerando Genotipo Aleatoriamente!\n");
     gen_bin = genotipo_dinamico(INDIVIDUOS, GENE)
     gen_bin_dec = genotipo_dinamico(INDIVIDUOS, gene_dec)
@@ -358,13 +374,13 @@ def main():
         INDIC = 0
         while contador1 <= (gene_dec * 0.8):
             # realiza (individuos/2) cruzamentos
-            selecao(gen_bin, gen_string, gene_dec)
+            gen_bin = selecao(gen_bin, gen_string, gene_dec)
             contador1 += 1
 
         contador1 = 1
         while contador1 <= (gene_dec * 0.8):
             # //516-86-14
-            mutacao(gen_bin)
+            gen_bin = mutacao(gen_bin)
             contador1 += 1
         # // transloca(gen_string,gene_dec);
 
@@ -375,16 +391,16 @@ def main():
         else:
             MAXITER = MAXITER + 150000
 
-        contador = 1;
+        contador = 1
 
-        imprime_cabec(file);
-        while (contador <= (GERACAO)):
-            imprime_hist_fitness(HIST_FIT, file, contador);
-            contador += 1;
+        imprime_cabec(file)
+        while GERACAO >= contador:
+            imprime_hist_fitness(HIST_FIT, file, contador)
+            contador += 1
 
         # //End Do
 
-        print("\n\n<<Simulacao Concluida - Relatorio Gerado!!>>");
+        print("\n\n<<Simulacao Concluida - Relatorio Gerado!!>>")
         # fprintf(pFile, "\nsimulacao concluida");
 
 
@@ -412,7 +428,7 @@ def selecao(gen, gen_string, gene_dec):
     if e5 <= (INDIVIDUOS / 2) - 1:
         e5 = j - e5
 
-    cruzamento(e2, e3, e3, gen, gen_string, gene_dec)
+    return cruzamento(e2, e3, e3, gen, gen_string, gene_dec)
 
 
 def cruzamento(i, j, pos, gen, gen_string, gene_dec):
@@ -438,7 +454,7 @@ def cruzamento(i, j, pos, gen, gen_string, gene_dec):
         # //
         gen[pos][gen_ale + 5] = gen[i][gen_ale + 5]
         gen[pos][gen_ale1 + 5] = gen[j][gen_ale1 + 5]
-
+    return gen
 
 def mutacao(gen):
     pm = np.random.random_integers(0, 10, 1)[0]
@@ -461,7 +477,7 @@ def mutacao(gen):
 
 
 def imprime_fitness(fit, file, contador):
-    global HIST_FIT
+    global HIST_FIT, SOMA_NINT_TOTAL
     soma_fit = 0.0
     soma_nint = 0.0
     contador_val = 0
@@ -473,7 +489,7 @@ def imprime_fitness(fit, file, contador):
     # fprintf(pFile, "\n_______________________________________________________________");
     print("\n\nResumo da Geracao:%d", contador)
     print("\n_______________________________________________________________")
-    print("\nIND  |Fitness      |Posto  |Acum    |EMQ      |NINT  |NT") if N == 3 else print("\nIND  |Fitness      |Posto  |Acum    |EMQ      |NINT1 |NINT2  |NT")
+    print("\nIND  |Fitness      |Posto  |Acum    |EMQ      |NINT  |NT" if N == 3 else "\nIND  |Fitness      |Posto  |Acum    |EMQ      |NINT1 |NINT2  |NT")
     print("\n_______________________________________________________________")
 
     for i in range(0, INDIVIDUOS):
@@ -495,18 +511,19 @@ def imprime_fitness(fit, file, contador):
             # fprintf(pFile, "      %d", fit[i][7]);
         print("   %3.0f", fit[i][6])
         # fprintf(pFile, "   %3.0f", fit[i][6]);
-        soma_fit = soma_fit + fit[i][1];
-        if (fit[i][5] > 0):
-            soma_nint = soma_nint + fit[i][5];
-            contador_val += 1;
-        SUP = fit[i][3];
+        soma_fit = soma_fit + fit[i][1]
+        if 0 < fit[i][5]:
+            soma_nint = soma_nint + fit[i][5]
+            contador_val += 1
+        global SUP
+        SUP = fit[i][3]
 
     print("\n===============================================================\n")
     # fprintf(pFile, "\n===============================================================\n");
-    if (contador_val > 0):
-        soma_nint_total = SOMA_NINT_TOTAL + (soma_nint / contador_val);
-        print("\nMedia do Fitness=%3.4f\n", soma_fit / contador_val);
-        print("Media de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", soma_nint / contador_val);
+    if 0 < contador_val:
+        SOMA_NINT_TOTAL = SOMA_NINT_TOTAL + (soma_nint / contador_val)
+        print("\nMedia do Fitness=%3.4f\n", soma_fit / contador_val)
+        print("Media de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", soma_nint / contador_val)
         # fprintf(pFile, "\nMedia do Fitness=%3.4f\n", soma_fit / contador_val);
         # fprintf(pFile, "Media de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", soma_nint / contador_val);
     # [(None, []), (None, []), (None, []), (None, []), (None, []), (None, []), (None, []), (None, []), (None, []), (None, [])]
@@ -514,7 +531,7 @@ def imprime_fitness(fit, file, contador):
 
     # HIST_FIT[contador - 1][0] = fit[0][1];
 
-    if (contador_val > 0):
+    if 0 < contador_val:
         # HIST_FIT[contador - 1][1] = soma_fit / contador_val;
         HIST_FIT[contador - 1][1].append(soma_fit / contador_val)
     else:
@@ -523,25 +540,25 @@ def imprime_fitness(fit, file, contador):
 
     for i in range(0, INDIVIDUOS):
 
-        if (fit[i][5] > 0):
+        if 0 < fit[i][5]:
             var_nint = var_nint + pow((fit[i][5] - (soma_nint / contador_val)), 2) / contador_val
 
     print("Variancia de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", var_nint)
     print("Desvio Padrao de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", (var_nint) ** (1 / 2))
     # fprintf(pFile, "Variancia de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", var_nint);
     # fprintf(pFile, "Desvio Padrao de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", sqrt(var_nint));
-    if (contador_val > 0):
+    if 0 < contador_val:
         print("Erro Padrao de Neuronios na Camada Intermediaria na Geracao=%3.2f\n",
-              (var_nint) ** (-1 / 2) / (contador_val) ** (1 / 2));
+              var_nint ** (-1 / 2) / contador_val ** (1 / 2))
         print("Coeficiente de Variacao de Neuronios na Camada Intermediaria na Geracao=%3.2f\n",
-              (var_nint) ** (1 / 2) / (soma_nint / contador_val));
+              var_nint ** (1 / 2) / (soma_nint / contador_val))
 
         # fprintf(pFile, "Erro Padrao de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", sqrt(var_nint) / sqrt(contador_val));
         # fprintf(pFile, "Coeficiente de Variacao de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", sqrt(var_nint) / (soma_nint / contador_val));
 
-    if (contador == GERACAO):
+    if contador == GERACAO:
         # fprintf(pFile, "\n\nMedia de Neuronios na Camada Intermediaria na Simulacao=%3.2f\n", (SOMA_NINT_TOTAL / contador));
-        print("\n\nMedia de Neuronios na Camada Intermediaria na Simulacao=%3.2f\n", (SOMA_NINT_TOTAL / contador));
+        print("\n\nMedia de Neuronios na Camada Intermediaria na Simulacao=%3.2f\n", (SOMA_NINT_TOTAL / contador))
 
 
 def imprime_cabec(file):
