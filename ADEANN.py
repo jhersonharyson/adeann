@@ -33,7 +33,7 @@ NSAI = 1
 NAPD = 900
 TARP3 = 0.01
 TARP4 = 0.01
-MAXINTER = 5000000
+MAXITER = 5000000
 ACEITAVEL = 0.001
 CONTID = 0
 CONTREGRASVAL = 0
@@ -313,6 +313,7 @@ def ordena(fit, file):
 
 def main():
     file = ''
+    global FIT, HIST_FIT, MAXITER
     #pFile = fopen("relat_autoMaasd2asdasd.txt", "w");
     for n in range(4,4):
 
@@ -324,19 +325,20 @@ def main():
             #fprintf(pFile, "\nTARP1 %.2f\nTARP2 %.2f\n\n\n");
 
     # gene : represneta o numero de genes por inidividuo, nesse caso 516;
-    gene_dec = int(GENE / 6); #//43+1=44 ultimo elemento armazena status da string valida % = valida;
+    gene_dec = int(GENE / 6) #//43+1=44 ultimo elemento armazena status da string valida % = valida;
     #//////    printf("Gerando Genotipo Aleatoriamente!\n");
-    gen_bin = genotipo_dinamico(INDIVIDUOS, GENE);
-    gen_bin_dec = genotipo_dinamico(INDIVIDUOS, gene_dec);
-    gen_string = genotipo_dinamico_string(INDIVIDUOS, gene_dec);
-    global FIT
+    gen_bin = genotipo_dinamico(INDIVIDUOS, GENE)
+    gen_bin_dec = genotipo_dinamico(INDIVIDUOS, gene_dec)
+    gen_string = genotipo_dinamico_string(INDIVIDUOS, gene_dec)
+
     FIT = zera_fitness(FIT)
-    contador = 1; #//contador do numero de geracoes
+    contador = 1 #//contador do numero de geracoes
     global contador1
     contador1 = 0
     #//int pontos_corte=(gene_dec*0.9);
 
-    while (contador <= GERACAO):
+    while contador <= GERACAO:
+
         imprime_genbin(gen_bin, INDIVIDUOS, GENE, file)
         legenes_genbin(gen_bin, gen_bin_dec, INDIVIDUOS, GENE)
         imprime_genbindec(gen_bin_dec, INDIVIDUOS, gene_dec)
@@ -361,15 +363,16 @@ def main():
         contador1 = 1
         while contador1 <= (gene_dec * 0.8):
             #//516-86-14
-            mutacao(gen_bin);
-            contador1+=1;
+            mutacao(gen_bin)
+            contador1 += 1
         #// transloca(gen_string,gene_dec);
-        if (GERACAO < 20):
-            MAXITER = MAXITER + 25000;
-        elif ((GERACAO >= 20) and (GERACAO < 40)):
-            MAXITER = MAXITER + 80000;
+
+        if GERACAO < 20:
+            MAXITER = MAXITER + 25000
+        elif (GERACAO >= 20) and (GERACAO < 40):
+            MAXITER = MAXITER + 80000
         else:
-            MAXITER = MAXITER + 150000;
+            MAXITER = MAXITER + 150000
 
         contador = 1;
 
@@ -436,9 +439,24 @@ def cruzamento(i, j, pos, gen, gen_string, gene_dec):
         gen[pos][gen_ale + 5] = gen[i][gen_ale + 5]
         gen[pos][gen_ale1 + 5] = gen[j][gen_ale1 + 5]
 
+def mutacao(gen):
+    pm = np.random.random_integers(0, 10, 1)[0]
+    pm = (pm / 100)
 
+    e6 = np.random.random_integers(0, 1, 1)[0]
+    e7 = int(FIT[e6][0])
+    e7 -= 1
+    if e7 <= (INDIVIDUOS / 2) - 1:
+        e7 = (INDIVIDUOS - 1) - e6
 
+    ale = (GENE - 1)
+    gen_ale = np.random.random_integers(0, ale, 1)[0]
 
+    if (gen[e7][gen_ale] is 0) and (pm <= 0.1):
+        gen[e7][gen_ale] = 1
+    else:
+        gen[e7][gen_ale] = 0
+    return gen
 
 def imprime_fitness( fit, file, contador):
     global HIST_FIT
