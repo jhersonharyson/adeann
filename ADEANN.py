@@ -81,6 +81,8 @@ def genotipo_estatico(individuos, gene):
     return gen
 
 def genotipo_dinamico( individuos, gene):
+    print(gene, " - ", int(gene))
+    gene = int(gene)
     gen = np.zeros(individuos * gene)
     gen.shape = (individuos , gene)
 
@@ -97,7 +99,10 @@ def gen_bin_dec_genotipo_dinamico(individuos, gene_dec):
 
 
 def genotipo_dinamico_string(individuos, gene_dec):
-    gen_string = np.zeros(individuos * (gene_dec+1))
+    print(gene_dec)
+    gene_dec = int(gene_dec)
+    gen_string = np.chararray(individuos * (gene_dec+1))
+    gen_string.shape = (individuos, gene_dec+1)
     return (gen_string)
 
 
@@ -114,6 +119,7 @@ def imprime_genbin(gen, individuos, gene, file):
 def imprime_genbindec(gen_bin_dec, individuos, gene_dec):
     i, j = 0, 0
     print("\n")
+    gene_dec = int(gene_dec)
     for i in range(0, individuos):
         print("-Individuo["+str(i+1)+"]-\n")
 
@@ -124,7 +130,7 @@ def imprime_genbindec(gen_bin_dec, individuos, gene_dec):
 
 
 def imprime_genstring(gen_string, individuos, gene_dec, file):
-    global CONTID, INDIC
+    global CONTID, INDIC, FIT
     for i in range(0, individuos):
         print("\n-Individuo["+str(i+1)+"]-\n")
         # fprintf(pFile, "\n-Individuo[%d]-\n", i + 1);
@@ -132,17 +138,17 @@ def imprime_genstring(gen_string, individuos, gene_dec, file):
             print(gen_string[i][j])
             # fprintf(pFile, "%c", gen_string[i][j])
         CONTID += 1
-        if gen_string[i][gene_dec + 1] is 'V':
+        if gen_string[i][gene_dec] is 'V':
 
             print("\t STRING VALIDA")
             # fprintf(pFile, "\t STRING VALIDA");
             mapeamento_genotipo_fenotipo(NENT, NSAI, 0, TIPO, file) # 0 -> aleatorio
         else:
-            FIT[INDIC][0] = (INDIC + 1)
+            FIT[INDIC][0] = INDIC + 1
             FIT[INDIC][1] = 0.0
             FIT[INDIC][2] = FIT[INDIC][0]
             aux = INDIC + 1
-            FIT[INDIC][3] = (INDIC + 1)
+            FIT[INDIC][3] = INDIC + 1
             if INDIC >= 1:
                 FIT[INDIC][3] = INDIC + 1 + FIT[INDIC - 1][3]
             else:
@@ -162,7 +168,7 @@ def legenes_genbin(gen, gen_bin_dec, individuos, gene):
     start = 0
     j = 0
     compactador = 0
-    stop = (gene / 6)
+    stop = int(gene / 6)
 
     while (j < individuos):
         for i in range(0, stop):
@@ -188,9 +194,10 @@ def converte_genbindec(gene1, gene2, gene3, gene4, gene5, gene6, j, compactador)
     return decimal
 
 def legenes_genbindec_string(gen_bin_dec, gen_string, individuos, gene_dec):
+
     for j in range(0, individuos):
         for i in range(0, gene_dec):
-            gen_string[j][i] = tab_converte[gen_bin_dec[j][i]]
+            gen_string[j][i] = tab_converte[int(gen_bin_dec[j][i])]
 
     return gen_string
 
@@ -318,12 +325,13 @@ def main():
             #fprintf(pFile, "\nTARP1 %.2f\nTARP2 %.2f\n\n\n");
 
     # gene : represneta o numero de genes por inidividuo, nesse caso 516;
-    gene_dec = (GENE / 6); #//43+1=44 ultimo elemento armazena status da string valida % = valida;
+    gene_dec = int(GENE / 6); #//43+1=44 ultimo elemento armazena status da string valida % = valida;
     #//////    printf("Gerando Genotipo Aleatoriamente!\n");
     gen_bin = genotipo_dinamico(INDIVIDUOS, GENE);
     gen_bin_dec = genotipo_dinamico(INDIVIDUOS, gene_dec);
     gen_string = genotipo_dinamico_string(INDIVIDUOS, gene_dec);
-    zera_fitness(FIT)
+    global FIT
+    FIT = zera_fitness(FIT)
     contador = 1; #//contador do numero de geracoes
     global contador1
     contador1 = 0
@@ -335,7 +343,7 @@ def main():
         imprime_genbindec(gen_bin_dec, INDIVIDUOS, gene_dec);
         legenes_genbindec_string(gen_bin_dec, gen_string, INDIVIDUOS, gene_dec);
         contador1 = 1; #//contador do sumero de cruzamentos por gera??o
-        zera_fitness(FIT);
+        FIT = zera_fitness(FIT);
         avalia_regras_gen_string(gen_string, INDIVIDUOS, gene_dec); #//Avalia Regras Validas
         imprime_genstring(gen_string, INDIVIDUOS, gene_dec, file);  #//Imprime Individuo[i] e DNA
         #//Ordenar Individuos
@@ -378,6 +386,7 @@ def main():
 
 
 def imprime_fitness( fit, file, contador):
+    global HIST_FIT
     soma_fit = 0.0;
     soma_nint = 0.0;
     contador_val = 0;
