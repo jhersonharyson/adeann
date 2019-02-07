@@ -93,7 +93,6 @@ def genotipo_dinamico_string(individuos, gene_dec):
 
 
 def imprime_genbin(gen, individuos, gene, file):
-    i, j = 0, 0
     print("\n")
     for i in range(0, individuos):
         for j in range(0, gene):
@@ -271,7 +270,7 @@ def treina_rede(individuos, file, NINT):
     #               metrics=['accuracy'])
 
     # # model.fit(x_train, y_train, epochs=5, batch_size=32)
-    print("Treina rede");
+    print("Treina rede")
 
 
 def treina_rede_(contind, pFile, NINT1, NINT2):
@@ -426,6 +425,7 @@ def selecao(gen, gen_string, gene_dec):
     e5 = int(FIT[e4][1])
     e5 -= 1
     if e5 <= (INDIVIDUOS / 2) - 1:
+        global e5
         e5 = j - e5
 
     return cruzamento(e2, e3, e3, gen, gen_string, gene_dec)
