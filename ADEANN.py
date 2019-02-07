@@ -179,7 +179,7 @@ def legenes_genbin(gen, gen_bin_dec, individuos, gene):
         j+=1
         start = 0
         compactador = 0
-  
+
 
 
 
@@ -267,4 +267,194 @@ def treina_rede(individuos, file, NINT):
 def treina_rede_(contind, pFile, NINT1, NINT2):
     print("Treina rede 4")
 
+def zera_fitness(fit):
+    fit = np.zeros(INDIVIDUOS * GENE)
+    fit.shape = (INDIVIDUOS, GENE)
+    return fit
 
+
+
+def ordena(fit, file):
+
+  min = 0
+  for i in range (0, INDIVIDUOS - 1):
+    min = i
+    for j in range(i + 1, INDIVIDUOS):
+        AUX1 = fit[j][1]
+        AUX2 = fit[min][1]
+        if (AUX1 > AUX2):
+            min = j
+
+
+    ch = fit[i][0]
+    ch1 = fit[i][1]
+    ch2 = fit[i][4]
+    ch3 = fit[i][5]
+    ch4 = fit[i][6]
+    ch5 = fit[min][0]
+    fit[i][0] = ch5
+    fit[i][1] = fit[min][1]
+    fit[i][4] = fit[min][4]
+    fit[i][5] = fit[min][5]
+    fit[i][6] = fit[min][6]
+    fit[min][0] = ch
+    fit[min][1] = ch1
+    fit[min][4] = ch2
+    fit[min][5] = ch3
+    fit[min][6] = ch4
+
+
+
+def main():
+    file = ''
+    #pFile = fopen("relat_autoMaasd2asdasd.txt", "w");
+    for n in range(4,4):
+
+        if (n is 3):
+            pass
+            #pFile = fopen("relat_N3asdas.txt", "w");
+        else:
+            pass
+            #fprintf(pFile, "\nTARP1 %.2f\nTARP2 %.2f\n\n\n");
+
+    # gene : represneta o numero de genes por inidividuo, nesse caso 516;
+    gene_dec = (GENE / 6); #//43+1=44 ultimo elemento armazena status da string valida % = valida;
+    #//////    printf("Gerando Genotipo Aleatoriamente!\n");
+    gen_bin = genotipo_dinamico(INDIVIDUOS, GENE);
+    gen_bin_dec = genotipo_dinamico(INDIVIDUOS, gene_dec);
+    gen_string = genotipo_dinamico_string(INDIVIDUOS, gene_dec);
+    zera_fitness(FIT)
+    contador = 1; #//contador do numero de geracoes
+    global contador1
+    contador1 = 0
+    #//int pontos_corte=(gene_dec*0.9);
+
+    while (contador <= GERACAO):
+        imprime_genbin(gen_bin, INDIVIDUOS, GENE, file);
+        legenes_genbin(gen_bin, gen_bin_dec, INDIVIDUOS, GENE);
+        imprime_genbindec(gen_bin_dec, INDIVIDUOS, gene_dec);
+        legenes_genbindec_string(gen_bin_dec, gen_string, INDIVIDUOS, gene_dec);
+        contador1 = 1; #//contador do sumero de cruzamentos por gera??o
+        zera_fitness(FIT);
+        avalia_regras_gen_string(gen_string, INDIVIDUOS, gene_dec); #//Avalia Regras Validas
+        imprime_genstring(gen_string, INDIVIDUOS, gene_dec, file);  #//Imprime Individuo[i] e DNA
+        #//Ordenar Individuos
+        ordena(FIT, file)
+        #//Imprimir Individuos
+        imprime_fitness(FIT, file, contador);
+        contador += 1
+        INDIC = 0
+        while (contador1 <= ((gene_dec * 0.8))):
+            # realiza (individuos/2) cruzamentos
+            selecao(gen_bin, gen_string, gene_dec);
+            contador1+=1;
+
+        contador1 = 1;
+        while (contador1 <= (gene_dec * 0.8)):
+            #//516-86-14
+            mutacao(gen_bin);
+            contador1+=1;
+        #// transloca(gen_string,gene_dec);
+        if (GERACAO < 20):
+            MAXITER = MAXITER + 25000;
+        elif ((GERACAO >= 20) and (GERACAO < 40)):
+            MAXITER = MAXITER + 80000;
+        else:
+            MAXITER = MAXITER + 150000;
+
+        contador = 1;
+
+        imprime_cabec(file);
+        while (contador <= (GERACAO)):
+            imprime_hist_fitness(HIST_FIT, file, contador);
+            contador+=1;
+
+        #//End Do
+
+        print("\n\n<<Simulacao Concluida - Relatorio Gerado!!>>");
+        #fprintf(pFile, "\nsimulacao concluida");
+
+
+
+
+def imprime_fitness( fit, file, contador):
+    soma_fit = 0.0;
+    soma_nint = 0.0;
+    contador_val = 0;
+    var_nint = 0.0;
+
+    #fprintf(pFile, "\n\nResumo da Geracao:%d", contador);
+    #fprintf(pFile, "\n_______________________________________________________________");
+    #n == 3 ? fprintf(pFile, "\nIND  |Fitness      |Posto  |Acum    |EMQ      |NINT  |NT") : fprintf(pFile, "\nIND  |Fitness      |Posto  |Acum    |EMQ      |NINT1 |NINT2  |NT");
+    #fprintf(pFile, "\n_______________________________________________________________");
+
+    for i in range(0,INDIVIDUOS):
+
+        print("\n%3.0f", fit[i][0])
+        print("    %3.4f", fit[i][1])
+        print("     %3.0f", fit[i][2])
+        print("     %3.0f", fit[i][3])
+        print("      %3.6f", fit[i][4])
+        print("   %3.0f", fit[i][5])
+        # fprintf(pFile, "\n%3.0f", fit[i][0]);
+        # fprintf(pFile, "    %3.4f", fit[i][1]);
+        # fprintf(pFile, "     %3.0f", fit[i][2]);
+        # fprintf(pFile, "     %3.0f", fit[i][3]);
+        # fprintf(pFile, "      %3.6f", fit[i][4]);
+        # fprintf(pFile, "   %3.0f", fit[i][5]);
+        if (N == 4):
+          print("      %d", fit[i][7])
+          #fprintf(pFile, "      %d", fit[i][7]);
+        print("   %3.0f", fit[i][6])
+        #fprintf(pFile, "   %3.0f", fit[i][6]);
+        soma_fit = soma_fit + fit[i][1];
+        if (fit[i][5] > 0):
+          soma_nint = soma_nint + fit[i][5];
+          contador_val+=1;
+        SUP = fit[i][3];
+
+    print("\n===============================================================\n")
+    #fprintf(pFile, "\n===============================================================\n");
+    if (contador_val > 0):
+
+        soma_nint_total = SOMA_NINT_TOTAL + (soma_nint / contador_val);
+        print("\nMedia do Fitness=%3.4f\n", soma_fit / contador_val);
+        print("Media de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", soma_nint / contador_val);
+        # fprintf(pFile, "\nMedia do Fitness=%3.4f\n", soma_fit / contador_val);
+        # fprintf(pFile, "Media de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", soma_nint / contador_val);
+
+    HIST_FIT[contador - 1][0] = fit[0][1];
+    if (contador_val > 0):
+        HIST_FIT[contador - 1][1] = soma_fit / contador_val;
+    else:
+        HIST_FIT[contador - 1][1] = 0.0;
+    for i in range(0, INDIVIDUOS):
+
+        if (fit[i][5] > 0):
+            var_nint = var_nint + pow((fit[i][5] - (soma_nint / contador_val)), 2) / contador_val
+
+    print("Variancia de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", var_nint)
+    print("Desvio Padrao de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", (var_nint)^(-1/2))
+    # fprintf(pFile, "Variancia de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", var_nint);
+    # fprintf(pFile, "Desvio Padrao de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", sqrt(var_nint));
+    if (contador_val > 0):
+        print("Erro Padrao de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", (var_nint)^(-1/2) / (contador_val)^(-1/2));
+        print("Coeficiente de Variacao de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", (var_nint)^(-1/2) / (soma_nint / contador_val));
+
+        # fprintf(pFile, "Erro Padrao de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", sqrt(var_nint) / sqrt(contador_val));
+        # fprintf(pFile, "Coeficiente de Variacao de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", sqrt(var_nint) / (soma_nint / contador_val));
+
+    if (contador == GERACAO):
+        # fprintf(pFile, "\n\nMedia de Neuronios na Camada Intermediaria na Simulacao=%3.2f\n", (SOMA_NINT_TOTAL / contador));
+        print("\n\nMedia de Neuronios na Camada Intermediaria na Simulacao=%3.2f\n", (SOMA_NINT_TOTAL / contador));
+
+
+def imprime_cabec(file):
+    print("\nPercentagem de Regras Validas=%3.2f\n %", (CONTREGRASVAL / (INDIVIDUOS * GERACAO)) * 100.0)
+    print("\n\nHistorico do Fitness na Simulacao")
+    print("\n________________________________________________________________")
+    print("\n Geracao  |Melhor Fitness         |Fitness Medio")
+    print("\n________________________________________________________________")
+
+
+main()
