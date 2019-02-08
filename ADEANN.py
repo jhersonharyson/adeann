@@ -124,7 +124,7 @@ def imprime_genstring(gen_string, individuos, gene_dec, file):
             print(gen_string[i][j])
             # fprintf(pFile, "%c", gen_string[i][j])
         CONTID += 1
-        if gen_string[i][gene_dec] is 'V':
+        if gen_string[i][gene_dec] is b'V':
 
             print("\t STRING VALIDA")
             # fprintf(pFile, "\t STRING VALIDA");
