@@ -1,3 +1,5 @@
+from keras.models import Sequential
+from keras.layers import Dense
 import numpy as np
 
 # ALGORITMO GENÉTICO
@@ -108,7 +110,7 @@ def imprime_genbindec(gen_bin_dec, individuos, gene_dec):
         print("-Individuo[" + str(i + 1) + "]-\n")
 
         for j in range(0, gene_dec):
-            print("%d\t", gen_bin_dec[i][j])
+            print("\t", gen_bin_dec[i][j])
     print("\n\n\n")
     return gen_bin_dec
 
@@ -183,43 +185,46 @@ def legenes_genbindec_string(gen_bin_dec, gen_string, individuos, gene_dec):
 
 
 def avalia_regras_gen_string(gen_string, individuos, gene_dec):
-
-    string_val = ['.', 'f', '[', 'F', 'f', 'n', 'B', ']']
-    for j in range(0, individuos):
-        for i in range(0, gene_dec - 6):
+    string_val = [b'.', b'f', b'[', b'F', b'f', b'n', b'B', b']']
+    for j in range(0, individuos-1):
+        for i in range(0, gene_dec - 7):
             # Le do inicio para o final com um passo de um bit.
-            if (gen_string[j][i] is '.') and (gen_string[j][i + 1] is 'f') and (gen_string[j][i + 2] is '[') and (
-                    gen_string[j][i + 3] is 'F') and (gen_string[j][i + 4] is 'f') and (
-                    gen_string[j][i + 5] == 'n') and (gen_string[j][i + 6] is 'B') and (gen_string[j][i + 7] is ']'):
-                gen_string[j][gene_dec + 1] = 'V'
+            if (gen_string[j][i] is b'.') and (gen_string[j][i + 1] is b'f') and (gen_string[j][i + 2] is b'[') and (
+                    gen_string[j][i + 3] is b'F') and (gen_string[j][i + 4] is b'f') and (
+                    gen_string[j][i + 5] is b'n') and (gen_string[j][i + 6] is b'B') and (gen_string[j][i + 7] is b']'):
+                gen_string[j][gene_dec] = b'V'
 
-    for j in range(0, individuos):
+    for j in range(0, individuos-1):
         # Le do final para o inicio com um passo de um bit.
-        for i in range(gene_dec, 4, -1):
-            if (gen_string[j][i] is '.') and (gen_string[j][i + 1] is 'f') and (gen_string[j][i + 2] is '[') and (
-                    gen_string[j][i + 3] is 'F') and (gen_string[j][i + 4] is 'f') and (
-                    gen_string[j][i + 5] is 'n') and (gen_string[j][i + 6] is 'B') and (gen_string[j][i + 7] is ']'):
-                gen_string[j][gene_dec + 1] = 'V'
+        for i in range(gene_dec-1, 6, -1):
+            if (gen_string[j][i] is b'.') and (gen_string[j][i + 1] is b'f') and (gen_string[j][i + 2] is b'[') and (
+                    gen_string[j][i + 3] is b'F') and (gen_string[j][i + 4] is b'f') and (
+                    gen_string[j][i + 5] is b'n') and (gen_string[j][i + 6] is b'B') and (gen_string[j][i + 7] is b']'):
+                gen_string[j][gene_dec] = b'V'
 
     # mudei aqui baixo todo la?o for
 
-    for j in range(0, individuos):
+    for j in range(0, individuos-1):
         # Le de forma sequencial bit a bit do inicio para o fim.
         cont_elem = 0
         pos_string = 0
 
-        for i in range(0, gene_dec):
+        for i in range(0, gene_dec-1):
             carac = gen_string[j][i]
 
-            if string_val[pos_string] is carac:
-                cont_elem += 1
-                pos_string += 1
+            if not (cont_elem >= 8):
+                if string_val[pos_string] is carac:
+                    cont_elem += 1
+                    pos_string += 1
 
             if cont_elem is 8:
-                gen_string[j][gene_dec + 1] = 'V'
+                gen_string[j][gene_dec] = b'V'
                 # //printf("j=%d",j);
                 # //printf("cont_elem=%d",cont_elem);
                 # //getch();
+    #print("\n2222222222222\n")
+    #print(gen_string)
+    return gen_string
 
 
 def mapeamento_genotipo_fenotipo(NENT, NSAI, aleatorio, TIPO, file):
@@ -243,9 +248,9 @@ def mapeamento_genotipo_fenotipo(NENT, NSAI, aleatorio, TIPO, file):
     ############################################################################################
     # n == 3 ? Mapeamento(NENT, NSAI, NINT_N3, SIZE_N3, "1.4", pFile) : Mapeamento(NENT, NSAI, NINT_N4, SIZE_N4, "1.4", pFile); // (ENTRADA, SAIDA, NR, TIPO)
 
-    if (N is 3):
+    if N is 3:
         treina_rede(CONTID, file, NINT)
-    if (N is 4):
+    if N is 4:
         treina_rede_(CONTID, file, NINT1, NINT2)
 
 
@@ -254,7 +259,6 @@ def NR_RAND(int):
 
 
 def treina_rede(individuos, file, NINT):
-
     # arr = np.zeros(9)
     # arr.shape = (3,3)
     # print(arr)
@@ -274,23 +278,31 @@ def treina_rede(individuos, file, NINT):
 
 
 def treina_rede_(contind, pFile, NINT1, NINT2):
+    print("\nNENT=(" + str(NENT - 1) + " Entradas + 1 Bias)")
+    print("\nNINT1=(" + str(NINT1 - 1) + " Int + 1 Bias)")
+    print("\nNINT2=(" + str(NINT2 - 1) + " Int + 1 Bias)")
+    print("\nNSAI=", NSAI)
+    print("\n\nTreinamento do Individuo=%d", INDIVIDUOS)
 
-    # arr = np.zeros(9)
-    # arr.shape = (3,3)
-    # print(arr)
-    # from keras.models import Sequential
-    # from keras.layers import Dense
+    x_train = [[0, 0], [0, 1], [1, 0], [1, 1]]
+    y_train = [[0], [1], [1], [0]]
 
-    # model = Sequential()
-    # model.add(Dense(units=64,activation='relu', input_dim=2))
-    # model.add(Dense(units=10, activation='softmax'))
+    model = Sequential()
+    model.add(Dense(units=10, activation='relu', input_dim=2))
+    model.add(Dense(units=10, activation='softmax'))
+    model.add(Dense(units=10, activation='softmax'))
 
-    # model.compile(loss='categorical_crossentropy',
-    #               optimizer='sgd',
-    #               metrics=['accuracy'])
+    model.compile(loss='categorical_crossentropy',
+                  optimizer='sgd',
+                  metrics=['accuracy'])
 
-    # # model.fit(x_train, y_train, epochs=5, batch_size=32)
-    print("Treina rede 4")
+    model.fit(x_train, y_train, epochs=5, batch_size=32)
+    predictions = model.predict(x_train)
+    rounded = [round(x) for x in predictions]
+    for i, predic in enumerate(rounded):
+        print("\nPadrao>>", i)
+        print("\ncalculado>>" + str(predic) + "   \tdesejado>>" + str(y_train[i]) + "  \tErro>>", y_train[i] - predic)
+    print("\n\nTreina rede 4")
 
 
 def zera_fitness(fit):
@@ -362,7 +374,7 @@ def main():
         legenes_genbindec_string(gen_bin_dec, gen_string, INDIVIDUOS, gene_dec)
         contador1 = 1  # //contador do sumero de cruzamentos por gera??o
         FIT = zera_fitness(FIT)
-        avalia_regras_gen_string(gen_string, INDIVIDUOS, gene_dec)  # //Avalia Regras Validas
+        gen_string = avalia_regras_gen_string(gen_string, INDIVIDUOS, gene_dec)  # //Avalia Regras Validas
         imprime_genstring(gen_string, INDIVIDUOS, gene_dec, file)  # //Imprime Individuo[i] e DNA
         # //Ordenar Individuos
         ordena(FIT, file)
@@ -404,7 +416,7 @@ def main():
 
 
 def selecao(gen, gen_string, gene_dec):
-    global e5 
+    global e5
     e1 = 0
     e = 0
     j = INDIVIDUOS - 1
@@ -426,7 +438,6 @@ def selecao(gen, gen_string, gene_dec):
     e5 = int(FIT[e4][1])
     e5 -= 1
     if e5 <= (INDIVIDUOS / 2) - 1:
-
         e5 = j - e5
 
     return cruzamento(e2, e3, e3, gen, gen_string, gene_dec)
@@ -456,6 +467,7 @@ def cruzamento(i, j, pos, gen, gen_string, gene_dec):
         gen[pos][gen_ale + 5] = gen[i][gen_ale + 5]
         gen[pos][gen_ale1 + 5] = gen[j][gen_ale1 + 5]
     return gen
+
 
 def mutacao(gen):
     pm = np.random.random_integers(0, 10, 1)[0]
@@ -490,7 +502,8 @@ def imprime_fitness(fit, file, contador):
     # fprintf(pFile, "\n_______________________________________________________________");
     print("\n\nResumo da Geracao:%d", contador)
     print("\n_______________________________________________________________")
-    print("\nIND  |Fitness      |Posto  |Acum    |EMQ      |NINT  |NT" if N == 3 else "\nIND  |Fitness      |Posto  |Acum    |EMQ      |NINT1 |NINT2  |NT")
+    print(
+        "\nIND  |Fitness      |Posto  |Acum    |EMQ      |NINT  |NT" if N == 3 else "\nIND  |Fitness      |Posto  |Acum    |EMQ      |NINT1 |NINT2  |NT")
     print("\n_______________________________________________________________")
 
     for i in range(0, INDIVIDUOS):
