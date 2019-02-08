@@ -404,6 +404,7 @@ def main():
 
 
 def selecao(gen, gen_string, gene_dec):
+    global e5 
     e1 = 0
     e = 0
     j = INDIVIDUOS - 1
@@ -425,7 +426,7 @@ def selecao(gen, gen_string, gene_dec):
     e5 = int(FIT[e4][1])
     e5 -= 1
     if e5 <= (INDIVIDUOS / 2) - 1:
-        global e5
+
         e5 = j - e5
 
     return cruzamento(e2, e3, e3, gen, gen_string, gene_dec)
@@ -494,12 +495,12 @@ def imprime_fitness(fit, file, contador):
 
     for i in range(0, INDIVIDUOS):
 
-        print("\n%3.0f", fit[i][0])
-        print("    %3.4f", fit[i][1])
-        print("     %3.0f", fit[i][2])
-        print("     %3.0f", fit[i][3])
-        print("      %3.6f", fit[i][4])
-        print("   %3.0f", fit[i][5])
+        print("\n", fit[i][0])
+        print("    ", fit[i][1])
+        print("     ", fit[i][2])
+        print("     ", fit[i][3])
+        print("      ", fit[i][4])
+        print("   ", fit[i][5])
         # fprintf(pFile, "\n%3.0f", fit[i][0]);
         # fprintf(pFile, "    %3.4f", fit[i][1]);
         # fprintf(pFile, "     %3.0f", fit[i][2]);
@@ -507,9 +508,9 @@ def imprime_fitness(fit, file, contador):
         # fprintf(pFile, "      %3.6f", fit[i][4]);
         # fprintf(pFile, "   %3.0f", fit[i][5]);
         if (N == 4):
-            print("      %d", fit[i][7])
+            print("      ", fit[i][7])
             # fprintf(pFile, "      %d", fit[i][7]);
-        print("   %3.0f", fit[i][6])
+        print("   ", fit[i][6])
         # fprintf(pFile, "   %3.0f", fit[i][6]);
         soma_fit = soma_fit + fit[i][1]
         if 0 < fit[i][5]:
@@ -522,8 +523,8 @@ def imprime_fitness(fit, file, contador):
     # fprintf(pFile, "\n===============================================================\n");
     if 0 < contador_val:
         SOMA_NINT_TOTAL = SOMA_NINT_TOTAL + (soma_nint / contador_val)
-        print("\nMedia do Fitness=%3.4f\n", soma_fit / contador_val)
-        print("Media de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", soma_nint / contador_val)
+        print("\nMedia do Fitness=\n", soma_fit / contador_val)
+        print("Media de Neuronios na Camada Intermediaria na Geracao=\n", soma_nint / contador_val)
         # fprintf(pFile, "\nMedia do Fitness=%3.4f\n", soma_fit / contador_val);
         # fprintf(pFile, "Media de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", soma_nint / contador_val);
     # [(None, []), (None, []), (None, []), (None, []), (None, []), (None, []), (None, []), (None, []), (None, []), (None, [])]
@@ -543,14 +544,14 @@ def imprime_fitness(fit, file, contador):
         if 0 < fit[i][5]:
             var_nint = var_nint + pow((fit[i][5] - (soma_nint / contador_val)), 2) / contador_val
 
-    print("Variancia de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", var_nint)
-    print("Desvio Padrao de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", (var_nint) ** (1 / 2))
+    print("Variancia de Neuronios na Camada Intermediaria na Geracao=\n", var_nint)
+    print("Desvio Padrao de Neuronios na Camada Intermediaria na Geracao=\n", (var_nint) ** (1 / 2))
     # fprintf(pFile, "Variancia de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", var_nint);
     # fprintf(pFile, "Desvio Padrao de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", sqrt(var_nint));
     if 0 < contador_val:
-        print("Erro Padrao de Neuronios na Camada Intermediaria na Geracao=%3.2f\n",
+        print("Erro Padrao de Neuronios na Camada Intermediaria na Geracao=\n",
               var_nint ** (-1 / 2) / contador_val ** (1 / 2))
-        print("Coeficiente de Variacao de Neuronios na Camada Intermediaria na Geracao=%3.2f\n",
+        print("Coeficiente de Variacao de Neuronios na Camada Intermediaria na Geracao=\n",
               var_nint ** (1 / 2) / (soma_nint / contador_val))
 
         # fprintf(pFile, "Erro Padrao de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", sqrt(var_nint) / sqrt(contador_val));
@@ -558,11 +559,11 @@ def imprime_fitness(fit, file, contador):
 
     if contador == GERACAO:
         # fprintf(pFile, "\n\nMedia de Neuronios na Camada Intermediaria na Simulacao=%3.2f\n", (SOMA_NINT_TOTAL / contador));
-        print("\n\nMedia de Neuronios na Camada Intermediaria na Simulacao=%3.2f\n", (SOMA_NINT_TOTAL / contador))
+        print("\n\nMedia de Neuronios na Camada Intermediaria na Simulacao=\n", (SOMA_NINT_TOTAL / contador))
 
 
 def imprime_cabec(file):
-    print("\nPercentagem de Regras Validas=%3.2f\n %", (CONTREGRASVAL / (INDIVIDUOS * GERACAO)) * 100.0)
+    print("\nPercentagem de Regras Validas=\n %", (CONTREGRASVAL / (INDIVIDUOS * GERACAO)) * 100.0)
     print("\n\nHistorico do Fitness na Simulacao")
     print("\n________________________________________________________________")
     print("\n Geracao  |Melhor Fitness         |Fitness Medio")
