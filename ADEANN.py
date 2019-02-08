@@ -282,23 +282,25 @@ def treina_rede_(contind, pFile, NINT1, NINT2):
     print("\nNINT1=(" + str(NINT1 - 1) + " Int + 1 Bias)")
     print("\nNINT2=(" + str(NINT2 - 1) + " Int + 1 Bias)")
     print("\nNSAI=", NSAI)
-    print("\n\nTreinamento do Individuo=%d", INDIVIDUOS)
+    print("\n\nTreinamento do Individuo=", INDIVIDUOS)
 
-    x_train = [[0, 0], [0, 1], [1, 0], [1, 1]]
-    y_train = [[0], [1], [1], [0]]
+    x_train = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+    y_train = np.array([[0], [1], [1], [0]])
 
     model = Sequential()
-    model.add(Dense(units=10, activation='relu', input_dim=2))
-    model.add(Dense(units=10, activation='softmax'))
-    model.add(Dense(units=10, activation='softmax'))
+    model.add(Dense(units=5, activation='relu', input_dim=2))
+    model.add(Dense(units=5, activation='softmax'))
+    model.add(Dense(units=1, activation='softmax'))
 
-    model.compile(loss='categorical_crossentropy',
+    model.compile(loss='binary_crossentropy',
                   optimizer='sgd',
                   metrics=['accuracy'])
 
     model.fit(x_train, y_train, epochs=5, batch_size=32)
     predictions = model.predict(x_train)
-    rounded = [round(x) for x in predictions]
+
+    rounded = [x for x in predictions]
+
     for i, predic in enumerate(rounded):
         print("\nPadrao>>", i)
         print("\ncalculado>>" + str(predic) + "   \tdesejado>>" + str(y_train[i]) + "  \tErro>>", y_train[i] - predic)
