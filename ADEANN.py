@@ -331,7 +331,7 @@ def treina_rede_(contind, file, NINT1, NINT2):
     # FITNESS = 1000 * (exp(-emq) * exp(-NINT)) + (1 / (emq * NINT));
 
     # nova fitness
-    FITNESS = (acertos/total)
+    FITNESS = 10 * (acertos/total) * (1 - abs(EMQ))
     FIT[INDIC][0] = INDIC + 1
     FIT[INDIC][1] = FITNESS
     FIT[INDIC][2] = FIT[INDIC][0]
@@ -456,7 +456,7 @@ def main():
 
         imprime_cabec(file)
         while GERACAO >= contador:
-            imprime_hist_fitness(HIST_FIT, file, contador)
+            imprime_hist_fitness(FIT, file, contador)
             contador += 1
 
         # //End Do
@@ -541,7 +541,7 @@ def mutacao(gen):
 
 
 def imprime_fitness(fit, file, contador):
-    global HIST_FIT, SOMA_NINT_TOTAL, soma_fit, soma_nint, contador_val, var_nint
+    global HIST_FIT, SOMA_NINT_TOTAL, SUP, soma_fit, soma_nint, contador_val, var_nint
     soma_fit = 0.0
     soma_nint = 0.0
     contador_val = 0
@@ -579,7 +579,6 @@ def imprime_fitness(fit, file, contador):
         if 0 < fit[i][5]:
             soma_nint = soma_nint + fit[i][5]
             contador_val += 1
-        global SUP
         SUP = fit[i][3]
 
     print("\n===============================================================\n")
@@ -591,7 +590,9 @@ def imprime_fitness(fit, file, contador):
         # fprintf(pFile, "\nMedia do Fitness=%3.4f\n", soma_fit / contador_val);
         # fprintf(pFile, "Media de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", soma_nint / contador_val);
     # [(None, []), (None, []), (None, []), (None, []), (None, []), (None, []), (None, []), (None, []), (None, []), (None, [])]
+    # HIST_FIT[contador - 1][0] = fit[0][1]; < --------------------------------
     HIST_FIT[contador - 1][1].append(fit[0][1])
+
 
     # HIST_FIT[contador - 1][0] = fit[0][1];
 
