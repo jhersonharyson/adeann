@@ -1,6 +1,7 @@
 from keras.models import Sequential
 from keras.layers import Dense
 import numpy as np
+import math as mt
 
 # ALGORITMO GENÉTICO
 GERACAO = 10
@@ -34,6 +35,7 @@ EMQ = 0.0
 FITNESS = 0.0
 AUX = 0
 SOMA_NINT_TOTAL = 0
+LIMIAR = 0.5
 
 # CONSTANTES
 FIT = 0
@@ -278,6 +280,7 @@ def treina_rede(individuos, file, NINT):
 
 
 def treina_rede_(contind, pFile, NINT1, NINT2):
+    global EMQ, FITNESS, INDIC, LIMIAR, NENT, NINT, NSAI, err, total, acertos
     print("\nNENT=(" + str(NENT - 1) + " Entradas + 1 Bias)")
     print("\nNINT1=(" + str(NINT1 - 1) + " Int + 1 Bias)")
     print("\nNINT2=(" + str(NINT2 - 1) + " Int + 1 Bias)")
@@ -288,23 +291,63 @@ def treina_rede_(contind, pFile, NINT1, NINT2):
     y_train = np.array([[0], [1], [1], [0]])
 
     model = Sequential()
-    model.add(Dense(units=5, activation='relu', input_dim=2))
-    model.add(Dense(units=5, activation='softmax'))
-    model.add(Dense(units=1, activation='softmax'))
+    model.add(Dense(units=12, activation='relu', input_dim=2))
+    model.add(Dense(units=12, activation='sigmoid'))
+    model.add(Dense(units=1, activation='sigmoid'))
 
     model.compile(loss='binary_crossentropy',
                   optimizer='sgd',
                   metrics=['accuracy'])
 
-    model.fit(x_train, y_train, epochs=5, batch_size=32)
-    predictions = model.predict(x_train)
+    model.fit(x_train, y_train, epochs=1000, batch_size=32)
 
-    rounded = [x for x in predictions]
+    x_test = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+    y_test = np.array([[0], [1], [1], [0]])
 
+    predictions = model.predict(x_test)
+
+    total = len(x_train) + len(x_test)
+    acertos = 0
+    rounded = [np.round(x) for x in predictions]
+    err = 0.0
     for i, predic in enumerate(rounded):
+        err = 0.5*(y_train[i][0] - predic)**2
         print("\nPadrao>>", i)
-        print("\ncalculado>>" + str(predic) + "   \tdesejado>>" + str(y_train[i]) + "  \tErro>>", y_train[i] - predic)
+        print("\ncalculado>>" + str(predic) + "   \tdesejado>>" + str(y_train[i]) + "  \tErro>>", err)
+        if int(y_train[i][0]) is 1:
+            if predic >= LIMIAR:
+                acertos += 1
+        else:
+            if predic < LIMIAR:
+                acertos += 1
+
+
     print("\n\nTreina rede 4")
+
+    EMQ = EMQ + err
+    # antiga finess
+    # FITNESS = 1000 * (exp(-emq) * exp(-NINT)) + (1 / (emq * NINT));
+
+    # nova fitness
+    FITNESS = abs(acertos/total * 1/EMQ)
+    FIT[INDIC][0] = INDIC + 1
+    FIT[INDIC][1] = FITNESS
+    FIT[INDIC][2] = FIT[INDIC][0]
+    FIT[INDIC][3] = INDIC + 1
+    if INDIC + 1 > 1:
+        FIT[INDIC][3] = INDIC + 1 + FIT[INDIC - 1][3]
+    else:
+        FIT[INDIC][3] = INDIC + 1
+    FIT[INDIC][4] = EMQ
+    FIT[INDIC][5] = NINT
+    FIT[INDIC][6] = NINT + NENT + NSAI
+
+    INDIC += 1
+
+    print("\nfitness>> ", FITNESS)
+    print("\n\n<<Pesos Camada Entrada Oculta>>\n")
+    # melhorar o resultado abaixo -------------------------------------------------------------------
+    print(model.get_weights())
 
 
 def zera_fitness(fit):
@@ -314,14 +357,15 @@ def zera_fitness(fit):
 
 
 def ordena(fit, file):
-    min = 0
+    global m
+    m = 0
     for i in range(0, INDIVIDUOS - 1):
-        min = i
+        m = i
         for j in range(i + 1, INDIVIDUOS):
-            AUX1 = fit[j][1]
-            AUX2 = fit[min][1]
-            if AUX1 > AUX2:
-                min = j
+            aux1 = fit[j][1]
+            aux2 = fit[m][1]
+            if aux1 > aux2:
+                m = j
 
         ch = fit[i][0]
         ch1 = fit[i][1]
