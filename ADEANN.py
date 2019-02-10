@@ -279,7 +279,7 @@ def treina_rede(individuos, file, NINT):
     print("Treina rede")
 
 
-def treina_rede_(contind, pFile, NINT1, NINT2):
+def treina_rede_(contind, file, NINT1, NINT2):
     global EMQ, FITNESS, INDIC, LIMIAR, NENT, NINT, NSAI, err, total, acertos
     print("\nNENT=(" + str(NENT - 1) + " Entradas + 1 Bias)")
     print("\nNINT1=(" + str(NINT1 - 1) + " Int + 1 Bias)")
@@ -291,8 +291,8 @@ def treina_rede_(contind, pFile, NINT1, NINT2):
     y_train = np.array([[0], [1], [1], [0]])
 
     model = Sequential()
-    model.add(Dense(units=12, activation='relu', input_dim=2))
-    model.add(Dense(units=12, activation='sigmoid'))
+    model.add(Dense(units=NINT1, activation='relu', input_dim=2))
+    model.add(Dense(units=NINT2, activation='sigmoid'))
     model.add(Dense(units=1, activation='sigmoid'))
 
     model.compile(loss='binary_crossentropy',
