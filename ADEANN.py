@@ -5,7 +5,7 @@ import math as mt
 
 # ALGORITMO GENÉTICO
 GERACAO = 10
-INDIVIDUOS = 60
+INDIVIDUOS = 10
 GENE = 516
 NINTER = 10000
 
@@ -20,7 +20,7 @@ NSAI = 1
 NAPD = 900
 TARP3 = 0.01
 TARP4 = 0.01
-MAXITER = 5000000 # Numero de Epocas
+MAXITER = 5000 # Numero de Epocas
 ACEITAVEL = 0.001
 CONTID = 0
 CONTREGRASVAL = 0
@@ -305,8 +305,10 @@ def treina_rede_(contind, file, NINT1, NINT2):
     y_test = np.array([[0], [1], [1], [0]])
 
     predictions = model.predict(x_test)
-
-    total = len(x_train) + len(x_test)
+    # < -------------------------------------------- caso total de treino é diferente a teste
+    # total = len(x_train) + len(x_test)
+    # < -------------------------------------------- caso total de treino é igual a teste
+    total = len(x_train)
     acertos = 0
     rounded = [np.round(x) for x in predictions]
     err = 0.0
@@ -324,12 +326,12 @@ def treina_rede_(contind, file, NINT1, NINT2):
 
     print("\n\nTreina rede 4")
 
-    EMQ = EMQ + err
+    EMQ = err
     # antiga finess
     # FITNESS = 1000 * (exp(-emq) * exp(-NINT)) + (1 / (emq * NINT));
 
     # nova fitness
-    FITNESS = abs(acertos/total * 1/EMQ)
+    FITNESS = (acertos/total)
     FIT[INDIC][0] = INDIC + 1
     FIT[INDIC][1] = FITNESS
     FIT[INDIC][2] = FIT[INDIC][0]
@@ -464,7 +466,8 @@ def main():
 
 
 def selecao(gen, gen_string, gene_dec):
-    global e5
+    global FIT, e5
+
     e1 = 0
     e = 0
     j = INDIVIDUOS - 1
@@ -538,7 +541,7 @@ def mutacao(gen):
 
 
 def imprime_fitness(fit, file, contador):
-    global HIST_FIT, SOMA_NINT_TOTAL
+    global HIST_FIT, SOMA_NINT_TOTAL, soma_fit, soma_nint, contador_val, var_nint
     soma_fit = 0.0
     soma_nint = 0.0
     contador_val = 0
@@ -548,10 +551,9 @@ def imprime_fitness(fit, file, contador):
     # fprintf(pFile, "\n_______________________________________________________________");
     # n == 3 ? fprintf(pFile, "\nIND  |Fitness      |Posto  |Acum    |EMQ      |NINT  |NT") : fprintf(pFile, "\nIND  |Fitness      |Posto  |Acum    |EMQ      |NINT1 |NINT2  |NT");
     # fprintf(pFile, "\n_______________________________________________________________");
-    print("\n\nResumo da Geracao:%d", contador)
+    print("\n\nResumo da Geracao: ", contador)
     print("\n_______________________________________________________________")
-    print(
-        "\nIND  |Fitness      |Posto  |Acum    |EMQ      |NINT  |NT" if N == 3 else "\nIND  |Fitness      |Posto  |Acum    |EMQ      |NINT1 |NINT2  |NT")
+    print("\nIND  |Fitness      |Posto  |Acum    |EMQ      |NINT  |NT" if N == 3 else "\nIND  |Fitness      |Posto  |Acum    |EMQ      |NINT1 |NINT2  |NT")
     print("\n_______________________________________________________________")
 
     for i in range(0, INDIVIDUOS):
@@ -568,7 +570,7 @@ def imprime_fitness(fit, file, contador):
         # fprintf(pFile, "     %3.0f", fit[i][3]);
         # fprintf(pFile, "      %3.6f", fit[i][4]);
         # fprintf(pFile, "   %3.0f", fit[i][5]);
-        if (N == 4):
+        if N == 4:
             print("      ", fit[i][7])
             # fprintf(pFile, "      %d", fit[i][7]);
         print("   ", fit[i][6])
