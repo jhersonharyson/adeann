@@ -20,7 +20,7 @@ NSAI = 1
 NAPD = 900
 TARP3 = 0.01
 TARP4 = 0.01
-MAXITER = 5000000
+MAXITER = 5000000 # Numero de Epocas
 ACEITAVEL = 0.001
 CONTID = 0
 CONTREGRASVAL = 0
@@ -280,7 +280,7 @@ def treina_rede(individuos, file, NINT):
 
 
 def treina_rede_(contind, file, NINT1, NINT2):
-    global EMQ, FITNESS, INDIC, LIMIAR, NENT, NINT, NSAI, err, total, acertos
+    global EMQ, FITNESS, INDIC, LIMIAR, NENT, NINT, NSAI, N, MAXITER, err, total, acertos
     print("\nNENT=(" + str(NENT - 1) + " Entradas + 1 Bias)")
     print("\nNINT1=(" + str(NINT1 - 1) + " Int + 1 Bias)")
     print("\nNINT2=(" + str(NINT2 - 1) + " Int + 1 Bias)")
@@ -299,7 +299,7 @@ def treina_rede_(contind, file, NINT1, NINT2):
                   optimizer='sgd',
                   metrics=['accuracy'])
 
-    model.fit(x_train, y_train, epochs=1000, batch_size=32)
+    model.fit(x_train, y_train, epochs=MAXITER, batch_size=32)
 
     x_test = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
     y_test = np.array([[0], [1], [1], [0]])
@@ -340,10 +340,12 @@ def treina_rede_(contind, file, NINT1, NINT2):
         FIT[INDIC][3] = INDIC + 1
     FIT[INDIC][4] = EMQ
     FIT[INDIC][5] = NINT
-    FIT[INDIC][6] = NINT + NENT + NSAI
+    FIT[INDIC][6] = NINT1 + NINT2 + NENT + NSAI
+    if N is 4:
+        FIT[INDIC][7] = NINT2 - 1
 
     INDIC += 1
-
+    print("\nemq>> ", EMQ)
     print("\nfitness>> ", FITNESS)
     print("\n\n<<Pesos Camada Entrada Oculta>>\n")
     # melhorar o resultado abaixo -------------------------------------------------------------------
@@ -356,33 +358,33 @@ def zera_fitness(fit):
     return fit
 
 
-def ordena(fit, file):
+def ordena(FIT, file):
     global m
     m = 0
     for i in range(0, INDIVIDUOS - 1):
         m = i
         for j in range(i + 1, INDIVIDUOS):
-            aux1 = fit[j][1]
-            aux2 = fit[m][1]
+            aux1 = FIT[j][1]
+            aux2 = FIT[m][1]
             if aux1 > aux2:
                 m = j
 
-        ch = fit[i][0]
-        ch1 = fit[i][1]
-        ch2 = fit[i][4]
-        ch3 = fit[i][5]
-        ch4 = fit[i][6]
-        ch5 = fit[min][0]
-        fit[i][0] = ch5
-        fit[i][1] = fit[min][1]
-        fit[i][4] = fit[min][4]
-        fit[i][5] = fit[min][5]
-        fit[i][6] = fit[min][6]
-        fit[min][0] = ch
-        fit[min][1] = ch1
-        fit[min][4] = ch2
-        fit[min][5] = ch3
-        fit[min][6] = ch4
+        ch = FIT[i][0]
+        ch1 = FIT[i][1]
+        ch2 = FIT[i][4]
+        ch3 = FIT[i][5]
+        ch4 = FIT[i][6]
+        ch5 = FIT[m][0]
+        FIT[i][0] = ch5
+        FIT[i][1] = FIT[m][1]
+        FIT[i][4] = FIT[m][4]
+        FIT[i][5] = FIT[m][5]
+        FIT[i][6] = FIT[m][6]
+        FIT[m][0] = ch
+        FIT[m][1] = ch1
+        FIT[m][4] = ch2
+        FIT[m][5] = ch3
+        FIT[m][6] = ch4
 
 
 def main():
