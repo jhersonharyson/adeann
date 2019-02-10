@@ -39,7 +39,7 @@ LIMIAR = 0.5
 
 # CONSTANTES
 FIT = 0
-HIST_FIT = [(None, [])] * GERACAO
+HIST_FIT = [[None, []]] * GERACAO
 
 tab_converte = ['f', 'F', 'n', '.', 'n', '.', 'f', 'F', 'F', 'f', 'B', 'f', '[', 'n', '[', '.',
                 'f', ']', 'n', '*', '.', 'F', 'f', 'F', ']', '.', '[', 'f', 'f', '*', 'B', ']',
@@ -331,7 +331,7 @@ def treina_rede_(contind, file, NINT1, NINT2):
     # FITNESS = 1000 * (exp(-emq) * exp(-NINT)) + (1 / (emq * NINT));
 
     # nova fitness
-    FITNESS = 10 * (acertos/total) * (1 - abs(EMQ))
+    FITNESS = (acertos/total)
     FIT[INDIC][0] = INDIC + 1
     FIT[INDIC][1] = FITNESS
     FIT[INDIC][2] = FIT[INDIC][0]
@@ -456,7 +456,7 @@ def main():
 
         imprime_cabec(file)
         while GERACAO >= contador:
-            imprime_hist_fitness(FIT, file, contador)
+            imprime_hist_fitness(HIST_FIT, file, contador)
             contador += 1
 
         # //End Do
@@ -590,18 +590,17 @@ def imprime_fitness(fit, file, contador):
         # fprintf(pFile, "\nMedia do Fitness=%3.4f\n", soma_fit / contador_val);
         # fprintf(pFile, "Media de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", soma_nint / contador_val);
     # [(None, []), (None, []), (None, []), (None, []), (None, []), (None, []), (None, []), (None, []), (None, []), (None, [])]
-    # HIST_FIT[contador - 1][0] = fit[0][1]; < --------------------------------
-    HIST_FIT[contador - 1][1].append(fit[0][1])
 
+    HIST_FIT[contador - 1][0] = fit[0][1]
 
     # HIST_FIT[contador - 1][0] = fit[0][1];
 
     if 0 < contador_val:
         # HIST_FIT[contador - 1][1] = soma_fit / contador_val;
-        HIST_FIT[contador - 1][1].append(soma_fit / contador_val)
+        HIST_FIT[contador - 1][1] = soma_fit / contador_val
     else:
         # HIST_FIT[contador - 1][1] = 0.0;
-        HIST_FIT[contador - 1][1].append(0.0)
+        HIST_FIT[contador - 1][1] = 0.0
 
     for i in range(0, INDIVIDUOS):
 

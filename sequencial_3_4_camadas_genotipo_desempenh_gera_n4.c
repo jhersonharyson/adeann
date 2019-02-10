@@ -14040,6 +14040,8 @@ void imprime_fitness(double fit[][10], FILE *pFile, int contador)
     fprintf(pFile, "Media de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", soma_nint / contador_val);
   }
   hist_fit[contador - 1][0] = fit[0][1];
+  printf("\n\n\n\n>>>>>>> %f", hist_fit[contador - 1][0]);
+  system("pause");
   if (contador_val > 0)
     hist_fit[contador - 1][1] = soma_fit / contador_val;
   else
