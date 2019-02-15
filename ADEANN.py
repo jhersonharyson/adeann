@@ -20,7 +20,7 @@ NSAI = 1
 NAPD = 900
 TARP3 = 0.01
 TARP4 = 0.01
-MAXITER = 5000 # Numero de Epocas
+MAXITER = 5000  # Numero de Epocas
 ACEITAVEL = 0.001
 CONTID = 0
 CONTREGRASVAL = 0
@@ -188,7 +188,7 @@ def legenes_genbindec_string(gen_bin_dec, gen_string, individuos, gene_dec):
 
 def avalia_regras_gen_string(gen_string, individuos, gene_dec):
     string_val = [b'.', b'f', b'[', b'F', b'f', b'n', b'B', b']']
-    for j in range(0, individuos-1):
+    for j in range(0, individuos - 1):
         for i in range(0, gene_dec - 7):
             # Le do inicio para o final com um passo de um bit.
             if (gen_string[j][i] is b'.') and (gen_string[j][i + 1] is b'f') and (gen_string[j][i + 2] is b'[') and (
@@ -196,9 +196,9 @@ def avalia_regras_gen_string(gen_string, individuos, gene_dec):
                     gen_string[j][i + 5] is b'n') and (gen_string[j][i + 6] is b'B') and (gen_string[j][i + 7] is b']'):
                 gen_string[j][gene_dec] = b'V'
 
-    for j in range(0, individuos-1):
+    for j in range(0, individuos - 1):
         # Le do final para o inicio com um passo de um bit.
-        for i in range(gene_dec-1, 6, -1):
+        for i in range(gene_dec - 1, 6, -1):
             if (gen_string[j][i] is b'.') and (gen_string[j][i + 1] is b'f') and (gen_string[j][i + 2] is b'[') and (
                     gen_string[j][i + 3] is b'F') and (gen_string[j][i + 4] is b'f') and (
                     gen_string[j][i + 5] is b'n') and (gen_string[j][i + 6] is b'B') and (gen_string[j][i + 7] is b']'):
@@ -206,12 +206,12 @@ def avalia_regras_gen_string(gen_string, individuos, gene_dec):
 
     # mudei aqui baixo todo la?o for
 
-    for j in range(0, individuos-1):
+    for j in range(0, individuos - 1):
         # Le de forma sequencial bit a bit do inicio para o fim.
         cont_elem = 0
         pos_string = 0
 
-        for i in range(0, gene_dec-1):
+        for i in range(0, gene_dec - 1):
             carac = gen_string[j][i]
 
             if not (cont_elem >= 8):
@@ -224,8 +224,8 @@ def avalia_regras_gen_string(gen_string, individuos, gene_dec):
                 # //printf("j=%d",j);
                 # //printf("cont_elem=%d",cont_elem);
                 # //getch();
-    #print("\n2222222222222\n")
-    #print(gen_string)
+    # print("\n2222222222222\n")
+    # print(gen_string)
     return gen_string
 
 
@@ -254,6 +254,7 @@ def mapeamento_genotipo_fenotipo(NENT, NSAI, aleatorio, TIPO, file):
         treina_rede(CONTID, file, NINT)
     if N is 4:
         treina_rede_(CONTID, file, NINT1, NINT2)
+
 
 
 def NR_RAND(int):
@@ -285,13 +286,44 @@ def treina_rede_(contind, file, NINT1, NINT2):
     print("\nNINT1=(" + str(NINT1 - 1) + " Int + 1 Bias)")
     print("\nNINT2=(" + str(NINT2 - 1) + " Int + 1 Bias)")
     print("\nNSAI=", NSAI)
-    print("\n\nTreinamento do Individuo=", INDIVIDUOS)
+    print("\n\nTreinamento do Individuo=", contind)
 
-    x_train = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
-    y_train = np.array([[0], [1], [1], [0]])
+
+    # print("NINT1 ", NINT1, "\nNINT2 ", NINT2)
+    # input()
+
+    x_train = np.array([
+        [1, -1, -1],
+        [1, -1, 1],
+        [1, 1, -1],
+        [1, 1, 1],
+        [-1, -1, -1],
+        [-1, -1, 1],
+        [-1, 1, -1],
+        [-1, 1, 1]
+    ])
+
+    # y[0][0] = 1;  // DIREITA
+    # y[1][0] = 1;  // ASPIRAR
+    # y[2][0] = 0.7;  // ESQUERDA
+    # y[3][0] = 0;  // ASPIRAR
+    # y[4][0] = 1;  // DIREITA
+    # y[5][0] = 1;  // ASPIRAR
+    # y[6][0] = 0.4;  // ESQUERDA
+    # y[7][0] = 0;  // ASPIRAR
+    y_train = np.array([
+        [1],
+        [1],
+        [0.7],
+        [0],
+        [1],
+        [1],
+        [0.4],
+        [0]
+    ])
 
     model = Sequential()
-    model.add(Dense(units=NINT1, activation='relu', input_dim=2))
+    model.add(Dense(units=NINT1, activation='relu', input_dim=3))
     model.add(Dense(units=NINT2, activation='sigmoid'))
     model.add(Dense(units=1, activation='sigmoid'))
 
@@ -299,10 +331,10 @@ def treina_rede_(contind, file, NINT1, NINT2):
                   optimizer='sgd',
                   metrics=['accuracy'])
 
-    model.fit(x_train, y_train, epochs=MAXITER, batch_size=32)
+    model.fit(x_train, y_train, epochs=(10 * contind), batch_size=32)
 
-    x_test = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
-    y_test = np.array([[0], [1], [1], [0]])
+    x_test = x_train
+    y_test = y_train
 
     predictions = model.predict(x_test)
     # < -------------------------------------------- caso total de treino é diferente a teste
@@ -313,7 +345,7 @@ def treina_rede_(contind, file, NINT1, NINT2):
     rounded = [np.round(x) for x in predictions]
     err = 0.0
     for i, predic in enumerate(rounded):
-        err = 0.5*(y_train[i][0] - predic)**2
+        err = 0.5 * (y_train[i][0] - predic) ** 2
         print("\nPadrao>>", i)
         print("\ncalculado>>" + str(predic) + "   \tdesejado>>" + str(y_train[i]) + "  \tErro>>", err)
         if int(y_train[i][0]) is 1:
@@ -323,7 +355,6 @@ def treina_rede_(contind, file, NINT1, NINT2):
             if predic < LIMIAR:
                 acertos += 1
 
-
     print("\n\nTreina rede 4")
 
     EMQ = err
@@ -331,7 +362,7 @@ def treina_rede_(contind, file, NINT1, NINT2):
     # FITNESS = 1000 * (exp(-emq) * exp(-NINT)) + (1 / (emq * NINT));
 
     # nova fitness
-    FITNESS = (acertos/total)
+    FITNESS = (acertos / total)
     FIT[INDIC][0] = INDIC + 1
     FIT[INDIC][1] = FITNESS
     FIT[INDIC][2] = FIT[INDIC][0]
@@ -350,6 +381,8 @@ def treina_rede_(contind, file, NINT1, NINT2):
     print("\nemq>> ", EMQ)
     print("\nfitness>> ", FITNESS)
     print("\n\n<<Pesos Camada Entrada Oculta>>\n")
+
+
     # melhorar o resultado abaixo -------------------------------------------------------------------
     print(model.get_weights())
 
@@ -391,7 +424,7 @@ def ordena(FIT, file):
 
 def main():
     file = ''
-    global FIT, HIST_FIT, MAXITER
+    global FIT, HIST_FIT, MAXITER, INDIC
     # pFile = fopen("relat_autoMaasd2asdasd.txt", "w");
     for n in range(4, 4):
 
@@ -553,7 +586,8 @@ def imprime_fitness(fit, file, contador):
     # fprintf(pFile, "\n_______________________________________________________________");
     print("\n\nResumo da Geracao: ", contador)
     print("\n_______________________________________________________________")
-    print("\nIND  |Fitness      |Posto  |Acum    |EMQ      |NINT  |NT" if N == 3 else "\nIND  |Fitness      |Posto  |Acum    |EMQ      |NINT1 |NINT2  |NT")
+    print(
+        "\nIND  |Fitness      |Posto  |Acum    |EMQ      |NINT  |NT" if N == 3 else "\nIND  |Fitness      |Posto  |Acum    |EMQ      |NINT1 |NINT2  |NT")
     print("\n_______________________________________________________________")
 
     for i in range(0, INDIVIDUOS):
