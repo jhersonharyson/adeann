@@ -39,7 +39,10 @@ LIMIAR = 0.5
 
 # CONSTANTES
 FIT = 0
-HIST_FIT = [[None, []]] * GERACAO
+HIST_FIT = []
+for i in range(0, GERACAO):
+    HIST_FIT.append([])
+# HIST_FIT.shape = (GERACAO, 1)
 
 tab_converte = ['f', 'F', 'n', '.', 'n', '.', 'f', 'F', 'F', 'f', 'B', 'f', '[', 'n', '[', '.',
                 'f', ']', 'n', '*', '.', 'F', 'f', 'F', ']', '.', '[', 'f', 'f', '*', 'B', ']',
@@ -331,7 +334,7 @@ def treina_rede_(contind, file, NINT1, NINT2):
                   optimizer='sgd',
                   metrics=['accuracy'])
 
-    model.fit(x_train, y_train, epochs=(10 * contind), batch_size=32)
+    model.fit(x_train, y_train, epochs=10, batch_size=32)
 
     x_test = x_train
     y_test = y_train
@@ -625,16 +628,16 @@ def imprime_fitness(fit, file, contador):
         # fprintf(pFile, "Media de Neuronios na Camada Intermediaria na Geracao=%3.2f\n", soma_nint / contador_val);
     # [(None, []), (None, []), (None, []), (None, []), (None, []), (None, []), (None, []), (None, []), (None, []), (None, [])]
 
-    HIST_FIT[contador - 1][0] = fit[0][1]
+    HIST_FIT[contador - 1].append(("fitness", fit[0][1]))
 
     # HIST_FIT[contador - 1][0] = fit[0][1];
 
     if 0 < contador_val:
         # HIST_FIT[contador - 1][1] = soma_fit / contador_val;
-        HIST_FIT[contador - 1][1] = soma_fit / contador_val
+        HIST_FIT[contador - 1].append(("fitness_medio", soma_fit / contador_val))
     else:
         # HIST_FIT[contador - 1][1] = 0.0;
-        HIST_FIT[contador - 1][1] = 0.0
+         HIST_FIT[contador - 1].append(("fitness_medio", 0.0))
 
     for i in range(0, INDIVIDUOS):
 
