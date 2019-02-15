@@ -485,17 +485,17 @@ def main():
         else:
             MAXITER = MAXITER + 150000
 
-        contador = 1
+    contador = 1
 
-        imprime_cabec(file)
-        while GERACAO >= contador:
-            imprime_hist_fitness(HIST_FIT, file, contador)
-            contador += 1
+    imprime_cabec(file)
+    while GERACAO >= contador:
+        imprime_hist_fitness(HIST_FIT, file, contador)
+        contador += 1
 
-        # //End Do
+    # //End Do
 
-        print("\n\n<<Simulacao Concluida - Relatorio Gerado!!>>")
-        # fprintf(pFile, "\nsimulacao concluida");
+    print("\n\n<<Simulacao Concluida - Relatorio Gerado!!>>")
+    # fprintf(pFile, "\nsimulacao concluida");
 
 
 def selecao(gen, gen_string, gene_dec):
