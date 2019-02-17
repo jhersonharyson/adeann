@@ -1,6 +1,8 @@
+
 from keras.models import Sequential
 from keras.layers import Dense
 import numpy as np
+import os
 import math as mt
 
 # ALGORITMO GENÉTICO
@@ -257,6 +259,18 @@ def mapeamento_genotipo_fenotipo(NENT, NSAI, aleatorio, TIPO, file):
     SIZE_N4 = len(NINT_N4)
     ############################################################################################
     # n == 3 ? Mapeamento(NENT, NSAI, NINT_N3, SIZE_N3, "1.4", pFile) : Mapeamento(NENT, NSAI, NINT_N4, SIZE_N4, "1.4", pFile); // (ENTRADA, SAIDA, NR, TIPO)
+
+    cmd = "cd c_exc/executavel.exe "+NENT+" "+NSAI+" "+N+" "+NINT1+" "+NINT2+" "
+    try:
+        cmd_out = os.popen(cmd).read()
+        print(str(cmd_out))
+        pFile.write(str(cmd_out))
+    except TypeError:
+        print("\n\n ERROR_CMD_TYPE \n\n")
+        exit(0)
+    else:
+        print("\n\n ERROR_CMD_ELSE \n\n")
+        exit(0)
 
     if N is 3:
         treina_rede(CONTID, file, NINT)
@@ -878,22 +892,16 @@ def ordena(FIT, file):
             if aux1 > aux2:
                 m = j
 
-        ch = FIT[i][0]
-        ch1 = FIT[i][1]
-        ch2 = FIT[i][4]
-        ch3 = FIT[i][5]
-        ch4 = FIT[i][6]
-        ch5 = FIT[m][0]
-        FIT[i][0] = ch5
+        FIT[i][0] = FIT[m][0]
         FIT[i][1] = FIT[m][1]
         FIT[i][4] = FIT[m][4]
         FIT[i][5] = FIT[m][5]
         FIT[i][6] = FIT[m][6]
-        FIT[m][0] = ch
-        FIT[m][1] = ch1
-        FIT[m][4] = ch2
-        FIT[m][5] = ch3
-        FIT[m][6] = ch4
+        FIT[m][0] = FIT[i][0]
+        FIT[m][1] =  FIT[i][1]
+        FIT[m][4] =  FIT[i][4]
+        FIT[m][5] =  FIT[i][5]
+        FIT[m][6] =  FIT[i][6]
 
 
 def main():
