@@ -51,8 +51,8 @@ tab_converte = ['f', 'F', 'n', '.', 'n', '.', 'f', 'F', 'F', 'f', 'B', 'f', '[',
                 '.', ']', 'n', 'F', 'f', 'B', 'f', 'B', 'F', '[', 'B', 'n', '*', 'f', '.', ']',
                 ']', '[', 'n', 'F', 'n', 'B', '[', '.', 'f', ']', 'B', 'F', 'B', 'f', '*', '[']
 
+pFile = open("relat.txt", "w")
 
-pFile = open("relat.txt","w")
 
 def zerar_fitness(fit):
     fit = np.zeros(INDIVIDUOS * GENE)
@@ -260,16 +260,12 @@ def mapeamento_genotipo_fenotipo(NENT, NSAI, aleatorio, TIPO, file):
     ############################################################################################
     # n == 3 ? Mapeamento(NENT, NSAI, NINT_N3, SIZE_N3, "1.4", pFile) : Mapeamento(NENT, NSAI, NINT_N4, SIZE_N4, "1.4", pFile); // (ENTRADA, SAIDA, NR, TIPO)
 
-    cmd = "cd c_exc/executavel.exe "+NENT+" "+NSAI+" "+N+" "+NINT1+" "+NINT2+" "
     try:
+        cmd = "c_exec\\executavel.exe "+str(NENT)+" "+str(NSAI)+" "+str(N)+" "+str(NINT1)+" "+str(NINT2)+" "
         cmd_out = os.popen(cmd).read()
-        print(str(cmd_out))
         pFile.write(str(cmd_out))
     except TypeError:
         print("\n\n ERROR_CMD_TYPE \n\n")
-        exit(0)
-    else:
-        print("\n\n ERROR_CMD_ELSE \n\n")
         exit(0)
 
     if N is 3:
@@ -892,16 +888,22 @@ def ordena(FIT, file):
             if aux1 > aux2:
                 m = j
 
-        FIT[i][0] = FIT[m][0]
+        ch = FIT[i][0]
+        ch1 = FIT[i][1]
+        ch2 = FIT[i][4]
+        ch3 = FIT[i][5]
+        ch4 = FIT[i][6]
+        ch5 = FIT[m][0]
+        FIT[i][0] = ch5
         FIT[i][1] = FIT[m][1]
         FIT[i][4] = FIT[m][4]
         FIT[i][5] = FIT[m][5]
         FIT[i][6] = FIT[m][6]
-        FIT[m][0] = FIT[i][0]
-        FIT[m][1] =  FIT[i][1]
-        FIT[m][4] =  FIT[i][4]
-        FIT[m][5] =  FIT[i][5]
-        FIT[m][6] =  FIT[i][6]
+        FIT[m][0] = ch
+        FIT[m][1] = ch1
+        FIT[m][4] = ch2
+        FIT[m][5] = ch3
+        FIT[m][6] = ch4
 
 
 def main():
